@@ -4,6 +4,8 @@ namespace Khepin\YamlFixturesBundle\Loader;
 
 use Symfony\Component\Yaml\Yaml;
 use Doctrine\Common\Util\Inflector;
+use Doctrine\Common\DataFixtures\Purger\ORMPurger;
+use Doctrine\Common\DataFixtures\Executor\ORMExecutor;
 
 class YamlLoader {
 
@@ -99,6 +101,12 @@ class YamlLoader {
         }
         // Flush the complete object graph to the database
         $this->object_manager->flush();
+    }
+    
+    public function purgeDatabase(){
+        $purger = new ORMPurger($this->object_manager);
+        $executor = new ORMExecutor($this->object_manager, $purger);
+        $executor->purge();
     }
 
 }
