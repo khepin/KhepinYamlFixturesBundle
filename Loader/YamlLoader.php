@@ -14,19 +14,19 @@ class YamlLoader {
      * @var type 
      */
     private $kernel;
-    
+
     /**
      * Doctrine entity manager
      * @var type 
      */
     private $object_manager;
-    
+
     /**
      * Array of all yml files containing fixtures that should be loaded
      * @var type 
      */
     private $fixture_files = array();
-    
+
     /**
      * Maintains references to already created objects
      * @var type 
@@ -47,8 +47,8 @@ class YamlLoader {
             $path = $this->kernel->locateResource('@' . $bundle);
             $files = glob($path . 'DataFixtures/*.yml');
             $this->fixture_files = array_merge($this->fixture_files, $files);
-            if(!is_null($context)){
-                $files = glob($path.'DataFixtures/'. $context .'/*.yml');
+            if (!is_null($context)) {
+                $files = glob($path . 'DataFixtures/' . $context . '/*.yml');
                 $this->fixture_files = array_merge($this->fixture_files, $files);
             }
         }
@@ -67,22 +67,29 @@ class YamlLoader {
             // Get the fields that are not "associations"
             $metadata = $cmf->getMetaDataFor($class);
             $mapping = array_keys($metadata->fieldMappings);
-            
+            $associations = array_keys($metadata->associationMappings);
+
             foreach ($file['fixtures'] as $reference => $fixture) {
                 // Instantiate new object
                 $object = new $class;
                 foreach ($fixture as $field => $value) {
                     // Add the fields defined in the fistures file
                     $method = Inflector::camelize('set_' . $field);
-                    if(in_array($field, $mapping)){ // This is a standard field, not an association
+                    // 
+                    if (in_array($field, $mapping)) {
                         // Dates need to be converted to DateTime objects
                         $type = $metadata->fieldMappings[$field]['type'];
-                        if($type == 'datetime' OR $type == 'date'){
+                        if ($type == 'datetime' OR $type == 'date') {
                             $value = new \DateTime($value);
                         }
                         $object->$method($value);
-                    } else { // This field is an association, we load it from the references
+                    } else if (in_array($field, $associations)) { // This field is an association, we load it from the references
                         $object->$method($this->references[$value]);
+                    } else { 
+                        // It's a method call that will set a field named differently
+                        // eg: FOSUserBundle ->setPlainPassword sets the password after
+                        // Encrypting it
+                        $object->$method($value);
                     }
                 }
                 // Save a reference to the current object
