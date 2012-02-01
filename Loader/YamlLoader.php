@@ -2,8 +2,7 @@
 
 namespace Khepin\YamlFixturesBundle\Loader;
 
-use Symfony\Component\Yaml\Yaml;
-use Doctrine\Common\Util\Inflector;
+use Khepin\YamlFixturesBundle\Fixture\YamlFixture;
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 use Doctrine\Common\DataFixtures\Executor\ORMExecutor;
 
@@ -40,19 +39,33 @@ class YamlLoader {
         $this->bundles = $bundles;
         $this->kernel = $kernel;
     }
+    
+    /**
+     * Returns a previously saved reference
+     * @param type $reference_name
+     * @return type 
+     */
+    public function getReference($reference_name){
+        return $this->references[$reference_name];
+    }
+    
+    /**
+     * Sets a reference to an object
+     * @param type $name
+     * @param type $object 
+     */
+    public function setReference($name, $object){
+        $this->references[$name] = $object;
+    }
 
     /**
      * Gets all fixtures files
      */
-    protected function loadFixtureFiles($context = null) {
+    protected function loadFixtureFiles() {
         foreach ($this->bundles as $bundle) {
             $path = $this->kernel->locateResource('@' . $bundle);
             $files = glob($path . 'DataFixtures/*.yml');
             $this->fixture_files = array_merge($this->fixture_files, $files);
-            if (!is_null($context)) {
-                $files = glob($path . 'DataFixtures/' . $context . '/*.yml');
-                $this->fixture_files = array_merge($this->fixture_files, $files);
-            }
         }
     }
 
@@ -61,46 +74,10 @@ class YamlLoader {
      */
     public function loadFixtures($context = null) {
         $this->loadFixtureFiles($context);
-        $cmf = $this->object_manager->getMetadataFactory();
         foreach ($this->fixture_files as $file) {
-            $file = Yaml::parse($file);
-            // The model class for all fixtures defined in this file
-            $class = $file['model'];
-            // Get the fields that are not "associations"
-            $metadata = $cmf->getMetaDataFor($class);
-            $mapping = array_keys($metadata->fieldMappings);
-            $associations = array_keys($metadata->associationMappings);
-
-            foreach ($file['fixtures'] as $reference => $fixture) {
-                // Instantiate new object
-                $object = new $class;
-                foreach ($fixture as $field => $value) {
-                    // Add the fields defined in the fistures file
-                    $method = Inflector::camelize('set_' . $field);
-                    // 
-                    if (in_array($field, $mapping)) {
-                        // Dates need to be converted to DateTime objects
-                        $type = $metadata->fieldMappings[$field]['type'];
-                        if ($type == 'datetime' OR $type == 'date') {
-                            $value = new \DateTime($value);
-                        }
-                        $object->$method($value);
-                    } else if (in_array($field, $associations)) { // This field is an association, we load it from the references
-                        $object->$method($this->references[$value]);
-                    } else { 
-                        // It's a method call that will set a field named differently
-                        // eg: FOSUserBundle ->setPlainPassword sets the password after
-                        // Encrypting it
-                        $object->$method($value);
-                    }
-                }
-                // Save a reference to the current object
-                $this->references[$reference] = $object;
-                $this->object_manager->persist($object);
-            }
+            $fixture = new YamlFixture($file, $this);
+            $fixture->load($this->object_manager, $context);
         }
-        // Flush the complete object graph to the database
-        $this->object_manager->flush();
     }
     
     public function purgeDatabase(){

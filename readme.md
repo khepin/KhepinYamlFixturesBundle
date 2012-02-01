@@ -59,6 +59,8 @@ You can only define fixtures for one class per file.
 Fixture files are to be written in this format:
 
     model: Name\Space\MyBundle\Entity\User
+    tags: [ test, dev, prod ] # optional parameter
+    save_in_reverse: false # optional parameter
     fixtures:
         michael:
             name: Michael
@@ -72,6 +74,9 @@ You can use references to previously created fixtures:
         audi_a3:
             owner: michael
             since: "2010-12-12" #dates NEED to be set inside quotes
+
+You can also define as many files as you want for the same entity. This will be
+useful when used together with context tags (see below).
 
 # Usage
 
@@ -95,49 +100,52 @@ through the service container:
 Sometimes when setting up fixtures for testing purpose, you need to have different
 configurations. This is what the context aims to help solving.
 
-For now this is how your fixture files are organized:
-
-    src/
-        namespace/
-            MyBundle/
-                DataFixtures/
-                    somefixtures.yml
-                    otherfixtures.yml
-            MyOtherBundle/
-                DataFixtures/
-                    somefixtures.yml
-                    otherfixtures.yml
-
-The files under DataFixtures will always be loaded in the database, no matter what 
-the context is. But you can set some fixtures to be loaded only in a given context
-like this:
-
-    src/
-        namespace/
-            MyBundle/
-                DataFixtures/
-                    somefixtures.yml
-                    otherfixtures.yml
-                    testjapanese/
-                        japanesefixtures.yml
-                    testgerman/
-                        germanfixtures.yml
-            MyOtherBundle/
-                DataFixtures/
-                    somefixtures.yml
-                    otherfixtures.yml
-                    testjapanese/
-                        fixturesforjapantest.yml
+The contexts are equivalent to the tags set in the fixture file under the tag key.
+You can set as many tags as you want on a fixture file. Such as `prod`, `test` etc...
 
 If you define fixtures in this way, then from the command line, calling:
 
-    php app/console khepin:yamlfixtures:load testjapanese
+    php app/console khepin:yamlfixtures:load prod
 
-All the fixture files under a `testjapanese` subfolder of the DataFixtures folder
-will be loaded as well. If you use `testgerman`, it will load the german fixtures
-where they exist. Once again, fixtures that are not in a subdirectory of `DataFixtures`
-are *always* loaded.
+All the fixture files for which you have set:
+    
+    tag: [ ..., prod, ... ]
 
+Will be loaded. This way you can define fixtures that are loaded whenever you use
+a test or dev environment but are not loaded in prod for example.
+
+A fixture file with no tags at all is **always** loaded! This way you can setup your
+bootstrapping fixtures in files that have absolutely no tags and then have fixtures
+specific for each purpose.
+
+## And what the heck is this "save_in_reverse" thingy?
+
+This parameter can be omitted most of the time. It's only useful so far when you
+have a self referencing table. For example if you had fixtures like this:
+
+    fixtures:
+        last_level:
+            next_level: none
+            name: Meet the boss
+        middle_level:
+            next_level: last_level
+            name: complete the quest
+        start_level:
+            next_level: middle_level
+            name: introduction
+
+In this case, we need to put `last_level` first in our fixtures since it's the only
+one that doesn't reference anything else. We could not create `start_level` first
+because it needs `middle_level` to already exist etc...
+
+The problem with this is that when purging the database, the ORMPurger() goes through
+rows one by one ordered by their ids. So if we save them in this order, `last_level`
+should be the first to go away which will cause a problems with foreign keys as it is
+still referenced by `middle_level`.
+
+Save in reverse will create the objects in this order so the references are set
+properly and then save them in the opposite order so there is no exception when 
+purging the database.
 
 # Limitations
 
