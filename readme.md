@@ -37,8 +37,8 @@ In your `config.yml` or `config_dev.yml` add the following:
 
     khepin_yaml_fixtures:
         resources:
-            - LinadsCrmBundle
-            - LinadsMediaBundle
+            - MyBundle
+            - MyOtherBundle
 
 Under 'resources' is a list of the bundles that have fixtures that you wish to 
 load. The fixtures will be loaded in that order.
