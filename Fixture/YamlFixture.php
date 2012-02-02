@@ -6,23 +6,7 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Yaml\Yaml;
 use Doctrine\Common\Util\Inflector;
 
-class YamlFixture {
-
-    private $file;
-    
-    private $loader;
-    
-    private $tags = array();
-    
-    private $current_tag;
-
-    public function __construct($file, $loader) {
-        $this->file = Yaml::parse($file);
-        if(isset($this->file['tags'])){
-            $this->tags = $this->file['tags'];
-        }
-        $this->loader = $loader;
-    }
+class YamlFixture extends AbstractFixture {
 
     public function load(ObjectManager $manager, $tags = null) {
         if(!$this->hasTag($tags)){
@@ -75,18 +59,10 @@ class YamlFixture {
     }
     
     /**
-     * Returns if the given tag is set for the current fixture
-     * @param type $tag
+     * For fixtures that have relations to the same table, they need to appear
+     * in the opposite order that they need to be saved.
      * @return boolean 
      */
-    public function hasTag(Array $tags){
-        // if no tags were specified, the fixture should always be loaded
-        if(count($this->tags) == 0 || count(array_intersect($this->tags, $tags)) > 0 ){
-            return true;
-        }
-        return false;
-    }
-    
     public function isReverseSaveOrder(){
         if(!isset($this->file['save_in_reverse']) || $this->file['save_in_reverse'] == false){
             return false;

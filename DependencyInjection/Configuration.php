@@ -27,7 +27,10 @@ class Configuration implements ConfigurationInterface
     public function addBundlesSection($rootNode){
         $rootNode
             ->children()
-                ->arrayNode('resources')->prototype('scalar')
+                ->scalarNode('acl_manager')
+                    ->treatNullLike('problematic.acl_manager')
+                ->end()
+                ->arrayNode('resources')->prototype('scalar')->end()->end()
             ->end()
         ;
     }

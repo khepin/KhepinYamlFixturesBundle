@@ -26,5 +26,12 @@ class KhepinYamlFixturesExtension extends Extension
         $loader->load('services.xml');
         
         $container->setParameter('khepin_yaml_fixtures.resources', $config['resources']);
+        
+        // We set a method call even though we cannot add the proper reference yet
+        // so that the compiler pass can add it afterwards
+        if(isset($config['acl_manager'])){
+            $def = $container->getDefinition('khepin.yaml_loader');
+            $def->addMethodCall('setAclManager', array(null));
+        }
     }
 }

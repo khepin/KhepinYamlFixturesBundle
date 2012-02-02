@@ -150,6 +150,44 @@ Save in reverse will create the objects in this order so the references are set
 properly and then save them in the opposite order so there is no exception when 
 purging the database.
 
+## Using ACLs
+
+If you need to set ACL entries on your fixtures, it is possible. The ACLs are
+created after all fixtures have been saved so that there is no possible conflict.
+
+To set ACLs for the fixtures, you need to be using 
+[ProblematicAclManagerBundle](problematic/ProblematicAclManagerBundle).
+
+And to update your configuratin as follows:
+
+    khepin_yaml_fixtures:
+        acl_manager: ~
+        resources:
+            - MyBundle
+            - MyOtherBundle
+
+The ACLs can only use the standard defined masks from the Symfony MaskBuilder.
+Example:
+
+    model: My\NameSpace\Car
+    tags: [ test ]
+    fixtures:
+      dad_car:
+        name: Mercedes
+      mom_car:
+        name: Mini Cooper
+        
+    acl:
+      dad_car:
+        user_dad: MASK_OWNER
+        user_mom: MASK_MASTER
+      mom_car:
+        user_mom: MASK_OWNER
+
+Be careful that the ACLs in Symfony are not managed through Doctrine and 
+therefore will not be purged when you re-create your fixtures. However if 
+any conflicts, loading the ACLs will overwrite all previous ACL entries.
+
 # Limitations
 
 - The ordering of file loading might not be sufficient YET for people who need 
