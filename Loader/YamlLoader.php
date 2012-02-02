@@ -72,11 +72,11 @@ class YamlLoader {
     /**
      * Loads the fixtures file by file and saves them to the database 
      */
-    public function loadFixtures($context = null) {
-        $this->loadFixtureFiles($context);
+    public function loadFixtures() {
+        $this->loadFixtureFiles();
         foreach ($this->fixture_files as $file) {
             $fixture = new YamlFixture($file, $this);
-            $fixture->load($this->object_manager, $context);
+            $fixture->load($this->object_manager, func_get_args());
         }
     }
     

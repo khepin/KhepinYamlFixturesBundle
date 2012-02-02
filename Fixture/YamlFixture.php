@@ -24,8 +24,8 @@ class YamlFixture {
         $this->loader = $loader;
     }
 
-    public function load(ObjectManager $manager, $tag = null) {
-        if(!$this->hasTag($tag)){
+    public function load(ObjectManager $manager, $tags = null) {
+        if(!$this->hasTag($tags)){
             return;
         }
         $cmf = $manager->getMetadataFactory();
@@ -79,9 +79,9 @@ class YamlFixture {
      * @param type $tag
      * @return boolean 
      */
-    public function hasTag($tag){
+    public function hasTag(Array $tags){
         // if no tags were specified, the fixture should always be loaded
-        if(count($this->tags) == 0 || in_array($tag, $this->tags)){
+        if(count($this->tags) == 0 || count(array_intersect($this->tags, $tags)) > 0 ){
             return true;
         }
         return false;

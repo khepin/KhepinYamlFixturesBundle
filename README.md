@@ -87,13 +87,16 @@ useful when used together with context tags (see below).
 More later regarding contexts, there is no need to add a context unless you have
 a reason to.
 
+**ATTENTION**: the command line can only load one context at a time for now.
+
 ## From anywhere else
 
 If you need to load the fixtures from anywhere else like say ... your functional
 tests in order to setup a clean database for testing, you can access the same thing
-through the service container:
+through the service container with the added advantage of being able to load
+multiple contexts together:
 
-    $container->get('khepin.yaml_loader')->loadFixtures($context);
+    $container->get('khepin.yaml_loader')->loadFixtures('prod', 'test', ...);
 
 ## About contexts
 
