@@ -2,8 +2,6 @@
 
 namespace Khepin\YamlFixturesBundle\Fixture;
 
-use Symfony\Component\Yaml\Yaml;
-
 class YamlAclFixture extends AbstractFixture {
 
     public function load($acl_manager, $tags = null) {

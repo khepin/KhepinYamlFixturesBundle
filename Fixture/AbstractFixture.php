@@ -2,13 +2,15 @@
 
 namespace Khepin\YamlFixturesBundle\Fixture;
 
+use Symfony\Component\Yaml\Yaml;
+
 class AbstractFixture {
 
-    private $tags = array();
+    protected $tags = array();
     
-    private $file;
+    protected $file;
     
-    private $loader;
+    protected $loader;
     
     public function __construct($file, $loader) {
         $this->file = Yaml::parse($file);

@@ -3,7 +3,6 @@
 namespace Khepin\YamlFixturesBundle\Fixture;
 
 use Doctrine\Common\Persistence\ObjectManager;
-use Symfony\Component\Yaml\Yaml;
 use Doctrine\Common\Util\Inflector;
 
 class YamlFixture extends AbstractFixture {
