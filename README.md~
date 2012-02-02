@@ -109,7 +109,7 @@ If you define fixtures in this way, then from the command line, calling:
 
 All the fixture files for which you have set:
     
-    tags: [ ..., prod, ... ]
+    tag: [ ..., prod, ... ]
 
 Will be loaded. This way you can define fixtures that are loaded whenever you use
 a test or dev environment but are not loaded in prod for example.
