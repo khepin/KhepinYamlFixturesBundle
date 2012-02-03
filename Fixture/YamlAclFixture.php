@@ -14,7 +14,7 @@ class YamlAclFixture extends AbstractFixture {
                 $acl_manager->setObjectPermission(
                         $this->loader->getReference($reference), 
                         $this->getMask($permission), 
-                        $user
+                        $this->loader->getReference($user)
                 );
             }
         }
