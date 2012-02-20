@@ -12,7 +12,7 @@
 >
     <testsuites>
         <testsuite name="Yaml Fixtures">
-            <directory suffix=".php">./Khepin/</directory>
+            <directory suffix=".php">./Khepin/Tests</directory>
         </testsuite>
     </testsuites>
 </phpunit>
