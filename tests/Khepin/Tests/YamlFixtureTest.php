@@ -26,6 +26,10 @@ class YamlFixtureTest extends BaseTestCaseOrm {
         $this->assertEquals(2, count($cars));
         $car = $cars[0];
         $this->assertEquals('Mercedes', $car->getName());
+        $date = new \DateTime('2012-01-01');
+        $this->assertEquals($date, $car->getDatePurchased());
+        $this->assertEquals(get_class($date), get_class($car->getDatePurchased()));
+        
         $car = $cars[1];
         $this->assertEquals('BMW', $car->getName());
     }

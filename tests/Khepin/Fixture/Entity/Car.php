@@ -21,6 +21,12 @@ class Car {
      */
     private $name;
     
+    /**
+     * @ORM\Column(type="date", nullable=true)
+     * @var type 
+     */
+    private $date_purchased;
+    
     public function getId(){
         return $this->id;
     }
@@ -31,5 +37,13 @@ class Car {
     
     public function setName($name){
         $this->name = $name;
+    }
+    
+    public function getDatePurchased(){
+        return $this->date_purchased;
+    }
+    
+    public function setDatePurchased(\DateTime $date_purchased){
+        $this->date_purchased = $date_purchased;
     }
 }
