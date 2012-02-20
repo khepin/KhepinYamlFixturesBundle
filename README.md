@@ -1,6 +1,8 @@
 This bundles provides you with a way to use YAML based fixtures for symfony2 and
 Doctrine2. Basic features are already implemented and usable but more are coming.
 
+**Travic CI status:** [![Build Status](https://secure.travis-ci.org/khepin/KhepinYamlFixturesBundle.png?branch=master)](http://travis-ci.org/khepin/KhepinYamlFixturesBundle)
+
 # Installation
 
 Through the deps files add:
