@@ -1,0 +1,6 @@
+model: Khepin\Fixture\Entity\Car
+fixtures:
+  mercedes:
+    name: Mercedes
+  bmw:
+    name: BMW

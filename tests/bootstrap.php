@@ -52,3 +52,6 @@ Doctrine\Common\Annotations\AnnotationRegistry::registerFile(
 $reader = new \Doctrine\Common\Annotations\AnnotationReader();
 $reader = new \Doctrine\Common\Annotations\CachedReader($reader, new \Doctrine\Common\Cache\ArrayCache());
 $_ENV['annotation_reader'] = $reader;
+
+// Imports a class named appkernel to allow mocking it
+require_once __DIR__.'/Khepin/Utils/AppKernel.php';

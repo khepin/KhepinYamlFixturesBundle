@@ -1,0 +1,7 @@
+model: Khepin\Fixture\Entity\Car
+tags: [ french_cars, family_cars ]
+fixtures:
+  peugeot:
+    name: Peugeot
+  renault:
+    name: Renault
