@@ -47,5 +47,35 @@ class YamlFixtureTest extends BaseTestCaseOrm {
         $car = $repo->findOneBy(array('name' => 'BMW'));
         $this->assertEquals('BMW', $car->getName());
     }
+    
+    public function testWithAssociation(){
+        $this->kernel = m::mock(
+                        'AppKernel', array('locateResource' => __DIR__ . '/simple_loading/')
+        );
+        $loader = new YamlLoader($this->kernel, $this->doctrine, array('SomeBundle'));
+        $loader->loadFixtures('with_drivers');
+        
+        $repo = $this->doctrine->getEntityManager()->getRepository('Khepin\Fixture\Entity\Driver');
+        $driver = $repo->findOneBy(array('name' => 'Mom'));
+        $this->assertEquals($driver->getCar()->getName(), 'Mercedes');
+        $driver = $repo->findOneBy(array('name' => 'Dad'));
+        $this->assertEquals($driver->getCar()->getName(), 'BMW');
+        
+        $this->assertEquals(get_class($driver->getCar()), 'Khepin\Fixture\Entity\Car');
+    }
+    
+    public function testPurge(){
+        $this->kernel = m::mock(
+                        'AppKernel', array('locateResource' => __DIR__ . '/simple_loading/')
+        );
+        $loader = new YamlLoader($this->kernel, $this->doctrine, array('SomeBundle'));
+        $loader->loadFixtures('with_drivers');
+        $loader->purgeDatabase();
+        
+        $cars = $this->doctrine->getEntityManager()->getRepository('Khepin\Fixture\Entity\Car')->findAll();
+        $this->assertEmpty($cars);
+        $drivers = $this->doctrine->getEntityManager()->getRepository('Khepin\Fixture\Entity\Driver')->findAll();
+        $this->assertEmpty($drivers);
+    }
 
 }

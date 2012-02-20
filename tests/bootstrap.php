@@ -20,12 +20,13 @@ if (!file_exists($classLoaderFile)) {
 require_once $classLoaderFile;
 $loader = new Symfony\Component\ClassLoader\UniversalClassLoader;
 $loader->registerNamespaces(array(
-    'Symfony'                    => VENDOR_PATH,
-    'Doctrine\\Common'           => VENDOR_PATH.'/doctrine-common/lib',
-    'Doctrine\\DBAL'             => VENDOR_PATH.'/doctrine-dbal/lib',
-    'Doctrine\\ORM'              => VENDOR_PATH.'/doctrine-orm/lib',
-    'Mockery'                    => VENDOR_PATH.'/Mockery/library',
-    'Khepin'                     => __DIR__,
+    'Symfony'                           => VENDOR_PATH,
+    'Doctrine\\Common'                  => VENDOR_PATH.'/doctrine-common/lib',
+    'Doctrine\\Common\\DataFixtures'    => VENDOR_PATH.'/doctrine-data-fixtures/lib',
+    'Doctrine\\DBAL'                    => VENDOR_PATH.'/doctrine-dbal/lib',
+    'Doctrine\\ORM'                     => VENDOR_PATH.'/doctrine-orm/lib',
+    'Mockery'                           => VENDOR_PATH.'/Mockery/library',
+    'Khepin'                            => __DIR__,
 ));
 
 $loader->registerPrefixes(array(

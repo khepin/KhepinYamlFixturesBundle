@@ -10,9 +10,10 @@ if (!is_dir(VENDOR_PATH)) {
 }
 
 $deps = array(
-    array('doctrine-orm', 'http://github.com/doctrine/doctrine2.git', '35fc3c0671'),
-    array('doctrine-dbal', 'http://github.com/doctrine/dbal.git', 'ef6c86fef3'),
-    array('doctrine-common', 'http://github.com/doctrine/common.git', '38c854c37d'),
+    array('doctrine-orm', 'http://github.com/doctrine/doctrine2.git'),
+    array('doctrine-dbal', 'http://github.com/doctrine/dbal.git'),
+    array('doctrine-common', 'http://github.com/doctrine/common.git'),
+    array('doctrine-data-fixtures', 'http://github.com/doctrine/data-fixtures.git'),
 
     array('Symfony/Component/ClassLoader', 'http://github.com/symfony/ClassLoader.git', 'v2.0.9'),
     array('Symfony/Component/Yaml', 'http://github.com/symfony/Yaml.git', 'v2.0.9'),

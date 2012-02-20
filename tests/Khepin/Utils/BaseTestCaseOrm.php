@@ -60,7 +60,10 @@ class BaseTestCaseOrm extends \PHPUnit_Framework_TestCase {
      * @return \Doctrine\ORM\Mapping\Driver\Driver
      */
     protected function getMetadataDriverImplementation() {
-        return new AnnotationDriver($_ENV['annotation_reader']);
+        return new AnnotationDriver(
+                $_ENV['annotation_reader'], 
+                array(__DIR__.'/../Fixture/Entity')
+        );
     }
 
     /**
@@ -81,7 +84,10 @@ class BaseTestCaseOrm extends \PHPUnit_Framework_TestCase {
         $config = $this->getMockAnnotatedConfig();
         $em = EntityManager::create($conn, $config);
 
-        $entities = array('Khepin\\Fixture\\Entity\\Car');
+        $entities = array(
+            'Khepin\\Fixture\\Entity\\Car',
+            'Khepin\\Fixture\\Entity\\Driver'
+        );
 
         $schema = array_map(function($class) use ($em) {
                     return $em->getClassMetadata($class);

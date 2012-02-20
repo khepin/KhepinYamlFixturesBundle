@@ -1,0 +1,9 @@
+model: Khepin\Fixture\Entity\Driver
+tags: [ with_drivers ]
+fixtures:
+  dad:
+    name: Dad
+    car: bmw
+  mom:
+    name: Mom
+    car: mercedes
