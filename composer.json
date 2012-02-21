@@ -11,6 +11,12 @@
             "email": "khepin@gmail.com"
         }
     ],
+    "require": {
+        "php": ">=5.3.2",
+        "symfony/framework-bundle": "2.*",
+        "doctrine/doctrine-bundle": "2.*",
+        "stof/doctrine-extensions-bundle": "2.*"
+    }
     "autoload": {
         "psr-0": { "Khepin\\YamlFixturesBundle": "" }
     },
