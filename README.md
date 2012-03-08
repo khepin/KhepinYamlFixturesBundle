@@ -28,7 +28,7 @@ the dev environment as it shouldn't be needed elsewhere.
     {
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
             //...
-            $bundles[] = new Khepin\YamlFixturesBundle\KhepinYamlFixturesBundle(),
+            $bundles[] = new Khepin\YamlFixturesBundle\KhepinYamlFixturesBundle();
             //...
         }
     }
