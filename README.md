@@ -35,7 +35,7 @@ the dev environment as it shouldn't be needed elsewhere.
 
 # Configuration
 
-In your `config.yml` or `config_dev.yml` add the following:
+In your `config.yml` or `config_dev.yml` (recommended) add the following:
 
     khepin_yaml_fixtures:
         resources:
