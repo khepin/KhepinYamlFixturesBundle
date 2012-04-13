@@ -57,7 +57,7 @@ class YamlLoader {
      * @return type 
      */
     public function getReference($reference_name) {
-        return $this->references[$reference_name];
+        return !is_null($reference_name) ? $this->references[$reference_name] : null;
     }
 
     /**
