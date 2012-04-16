@@ -4,6 +4,11 @@ fixtures:
   dad:
     name: Dad
     car: bmw
+    secondCar: mercedes
   mom:
     name: Mom
     car: mercedes
+    secondCar:
+  son:
+    name: Son
+    car: bmw

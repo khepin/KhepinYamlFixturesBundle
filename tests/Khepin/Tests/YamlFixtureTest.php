@@ -82,4 +82,30 @@ class YamlFixtureTest extends BaseTestCaseOrm {
         $this->assertEmpty($drivers);
     }
 
+    public function testNullValuesInAssociations() {
+        $this->kernel = m::mock(
+            'AppKernel', array('locateResource' => __DIR__ . '/simple_loading/')
+        );
+        $loader = new YamlLoader($this->kernel, $this->doctrine, array('SomeBundle'));
+        $loader->loadFixtures('with_drivers');
+
+        $repo = $this->doctrine->getEntityManager()->getRepository('Khepin\Fixture\Entity\Driver');
+
+        $driver = $repo->findOneBy(array('name' => 'Mom'));
+        $this->assertEquals(get_class($driver->getCar()), 'Khepin\Fixture\Entity\Car');
+        $this->assertEquals($driver->getCar()->getName(), 'Mercedes');
+        $this->assertEquals($driver->getSecondCar(), null);
+
+        $driver = $repo->findOneBy(array('name' => 'Son'));
+        $this->assertEquals(get_class($driver->getCar()), 'Khepin\Fixture\Entity\Car');
+        $this->assertEquals($driver->getCar()->getName(), 'BMW');
+        $this->assertEquals($driver->getSecondCar(), null);
+
+        $driver = $repo->findOneBy(array('name' => 'Dad'));
+        $this->assertEquals(get_class($driver->getCar()), 'Khepin\Fixture\Entity\Car');
+        $this->assertEquals($driver->getCar()->getName(), 'BMW');
+        $this->assertEquals(get_class($driver->getSecondCar()), 'Khepin\Fixture\Entity\Car');
+        $this->assertEquals($driver->getSecondCar()->getName(), 'Mercedes');
+    }
+
 }
