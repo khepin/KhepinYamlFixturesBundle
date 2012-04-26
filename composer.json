@@ -2,21 +2,29 @@
     "name": "khepin/yaml-fixtures-bundle",
     "type": "symfony-bundle",
     "description": "Symfony bundle for easy loading of YAML based fixtures.",
-    "keywords": ["Data fixtures"],
+    "keywords": ["data fixtures doctrine yaml"],
     "homepage": "https://github.com/khepin/KhepinYamlFixturesBundle",
     "license": "MIT",
     "authors": [
         {
-            "name": "Sébastien Armand",
+            "name":  "Sébastien Armand",
             "email": "khepin@gmail.com"
         }
     ],
     "require": {
-        "doctrine/doctrine-bundle": "dev-master",
-        "doctrine/doctrine-fixtures-bundle": "2.*"
+        "doctrine/doctrine-fixtures-bundle": "2.*",
+        "doctrine/orm": "2.*",
+        "doctrine/doctrine-bundle": "dev-master"
+    },
+    "require-dev": {
+        "doctrine/mongodb-odm-bundle": "dev-master",
+        "mockery/mockery": "dev-master"
     },
     "autoload": {
-        "psr-0": { "Khepin\\YamlFixturesBundle": "" }
+        "psr-0": { 
+            "Khepin\\YamlFixturesBundle": "",
+            "Khepin": "tests"
+        }
     },
     "target-dir": "Khepin/YamlFixturesBundle"
 }
