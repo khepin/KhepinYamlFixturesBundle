@@ -1,0 +1,10 @@
+model: Khepin\Fixture\Document\Car
+persistence: mongodb
+tags: [ french_cars, family_cars ]
+fixtures:
+  peugeot:
+    name: Peugeot
+  renault:
+    name: Renault
+  citroen:
+    name: Citroen

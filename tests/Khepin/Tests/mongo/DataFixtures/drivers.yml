@@ -1,0 +1,15 @@
+model: Khepin\Fixture\Document\Driver
+persistence: mongodb
+tags: [ with_drivers ]
+fixtures:
+  dad:
+    name: Dad
+    cars: 
+      - peugeot
+      - renault
+      - citroen
+  mom:
+    name: Mom
+    cars:
+      - mercedes
+      - bmw

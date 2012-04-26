@@ -25,6 +25,9 @@ spl_autoload_register(function($class) {
 });
 
 Doctrine\Common\Annotations\AnnotationRegistry::registerFile(
+    __DIR__.'/../vendor/doctrine/mongodb-odm/lib/Doctrine/ODM/MongoDB/Mapping/Annotations/DoctrineAnnotations.php'
+);
+Doctrine\Common\Annotations\AnnotationRegistry::registerFile(
     __DIR__.'/../vendor/doctrine/orm/lib/Doctrine/ORM/Mapping/Driver/DoctrineAnnotations.php'
 );
 

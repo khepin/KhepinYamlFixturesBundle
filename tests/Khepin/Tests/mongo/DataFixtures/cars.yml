@@ -1,0 +1,9 @@
+model: Khepin\Fixture\Document\Car
+persistence: mongodb
+fixtures:
+  mercedes:
+    name: Mercedes
+    date_purchased: "2012-01-01"
+  bmw:
+    name: BMW
+    date_purchased: "2008-12-06"
