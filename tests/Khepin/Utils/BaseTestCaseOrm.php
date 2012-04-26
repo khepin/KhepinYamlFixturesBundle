@@ -78,7 +78,7 @@ class BaseTestCaseOrm extends \PHPUnit_Framework_TestCase {
         $conn = array(
             'driver' => 'pdo_sqlite',
             'memory' => true,
-//            'path' => __DIR__.'/../db.sqlite',
+            // 'path' => __DIR__.'/../db.sqlite',
         );
 
         $config = $this->getMockAnnotatedConfig();
@@ -96,7 +96,11 @@ class BaseTestCaseOrm extends \PHPUnit_Framework_TestCase {
         $schemaTool = new SchemaTool($em);
         $schemaTool->dropSchema(array());
         $schemaTool->createSchema($schema);
-        return $this->doctrine = m::mock(array('getEntityManager' => $em));
+        return $this->doctrine = m::mock(array(
+            'getEntityManager'  => $em,
+            'getManager'        => $em,
+            )
+        );
     }
 
 }

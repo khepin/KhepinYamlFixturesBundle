@@ -12,8 +12,8 @@ class AbstractFixture {
     
     protected $loader;
     
-    public function __construct($file, $loader) {
-        $this->file = Yaml::parse($file);
+    public function __construct(array $data, $loader) {
+        $this->file = $data;
         if(isset($this->file['tags'])){
             $this->tags = $this->file['tags'];
         }

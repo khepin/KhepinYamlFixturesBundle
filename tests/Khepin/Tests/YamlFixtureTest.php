@@ -12,13 +12,20 @@ class YamlFixtureTest extends BaseTestCaseOrm {
 
     public function setUp() {
         $this->getDoctrine();
+        $container = m::mock('Container', array(
+                'get' => $this->doctrine,
+                )
+        );
+        $this->kernel = m::mock(
+                'AppKernel', array(
+                        'locateResource' => __DIR__ . '/simple_loading/',
+                        'getContainer'   => $container
+                )
+        );
     }
 
     public function testSimpleLoading() {
-        $this->kernel = m::mock(
-                        'AppKernel', array('locateResource' => __DIR__ . '/simple_loading/')
-        );
-        $loader = new YamlLoader($this->kernel, $this->doctrine, array('SomeBundle'));
+        $loader = new YamlLoader($this->kernel, array('SomeBundle'));
         $loader->loadFixtures();
 
         $em = $this->doctrine->getEntityManager();
@@ -35,10 +42,7 @@ class YamlFixtureTest extends BaseTestCaseOrm {
     }
 
     public function testContext() {
-        $this->kernel = m::mock(
-                        'AppKernel', array('locateResource' => __DIR__ . '/simple_loading/')
-        );
-        $loader = new YamlLoader($this->kernel, $this->doctrine, array('SomeBundle'));
+        $loader = new YamlLoader($this->kernel, array('SomeBundle'));
         $loader->loadFixtures('french_cars');
 
         $repo = $this->doctrine->getEntityManager()->getRepository('Khepin\Fixture\Entity\Car');
@@ -53,10 +57,7 @@ class YamlFixtureTest extends BaseTestCaseOrm {
     }
     
     public function testWithAssociation(){
-        $this->kernel = m::mock(
-                        'AppKernel', array('locateResource' => __DIR__ . '/simple_loading/')
-        );
-        $loader = new YamlLoader($this->kernel, $this->doctrine, array('SomeBundle'));
+        $loader = new YamlLoader($this->kernel, array('SomeBundle'));
         $loader->loadFixtures('with_drivers');
         
         $repo = $this->doctrine->getEntityManager()->getRepository('Khepin\Fixture\Entity\Driver');
@@ -69,12 +70,9 @@ class YamlFixtureTest extends BaseTestCaseOrm {
     }
     
     public function testPurge(){
-        $this->kernel = m::mock(
-                        'AppKernel', array('locateResource' => __DIR__ . '/simple_loading/')
-        );
-        $loader = new YamlLoader($this->kernel, $this->doctrine, array('SomeBundle'));
+        $loader = new YamlLoader($this->kernel, array('SomeBundle'));
         $loader->loadFixtures('with_drivers');
-        $loader->purgeDatabase();
+        $loader->purgeDatabase('orm');
         
         $cars = $this->doctrine->getEntityManager()->getRepository('Khepin\Fixture\Entity\Car')->findAll();
         $this->assertEmpty($cars);
@@ -83,10 +81,7 @@ class YamlFixtureTest extends BaseTestCaseOrm {
     }
 
     public function testNullValuesInAssociations() {
-        $this->kernel = m::mock(
-            'AppKernel', array('locateResource' => __DIR__ . '/simple_loading/')
-        );
-        $loader = new YamlLoader($this->kernel, $this->doctrine, array('SomeBundle'));
+        $loader = new YamlLoader($this->kernel, array('SomeBundle'));
         $loader->loadFixtures('with_drivers');
 
         $repo = $this->doctrine->getEntityManager()->getRepository('Khepin\Fixture\Entity\Driver');

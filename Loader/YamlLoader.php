@@ -4,8 +4,8 @@ namespace Khepin\YamlFixturesBundle\Loader;
 
 use Khepin\YamlFixturesBundle\Fixture\YamlFixture;
 use Khepin\YamlFixturesBundle\Fixture\YamlAclFixture;
-use Doctrine\Common\DataFixtures\Purger\ORMPurger;
-use Doctrine\Common\DataFixtures\Executor\ORMExecutor;
+use Doctrine\Common\Persistence\ObjectManager;
+use Symfony\Component\Yaml\Yaml;
 
 class YamlLoader {
 
@@ -37,8 +37,7 @@ class YamlLoader {
      */
     private $references = array();
 
-    public function __construct(\AppKernel $kernel, $doctrine, $bundles) {
-        $this->object_manager = $doctrine->getEntityManager();
+    public function __construct(\AppKernel $kernel, $bundles) {
         $this->bundles = $bundles;
         $this->kernel = $kernel;
     }
@@ -86,8 +85,12 @@ class YamlLoader {
     public function loadFixtures() {
         $this->loadFixtureFiles();
         foreach ($this->fixture_files as $file) {
-            $fixture = new YamlFixture($file, $this);
-            $fixture->load($this->object_manager, func_get_args());
+            $fixture_data = Yaml::parse($file);
+            // if nothing is specified, we use doctrine orm for persistence
+            $persistence = isset($fixture_data['persistence']) ? $fixture_data['persistence'] : 'orm';
+            $fixture = $this->getFixtureClass($persistence);
+            $fixture = new $fixture($fixture_data, $this);
+            $fixture->load($this->getManager($persistence), func_get_args());
         }
 
         if (!is_null($this->acl_manager)) {
@@ -101,10 +104,49 @@ class YamlLoader {
     /**
      * Remove all fixtures from the database 
      */
-    public function purgeDatabase() {
-        $purger = new ORMPurger($this->object_manager);
-        $executor = new ORMExecutor($this->object_manager, $purger);
+    public function purgeDatabase($persistence) {
+        $purgetools = array(
+            'orm'       => array(
+                'purger'    => 'Doctrine\Common\DataFixtures\Purger\ORMPurger',
+                'executor'  => 'Doctrine\Common\DataFixtures\Executor\ORMExecutor',
+            ),
+            'mongodb'   => array(
+                'purger'    => 'Doctrine\Common\DataFixtures\Purger\MongoDBPurger',
+                'executor'  => 'Doctrine\Common\DataFixtures\Executor\MongoDBExecutor',
+            )
+        );
+        // Retrieve the correct purger and executor
+        $purge_class = $purgetools[$persistence]['purger'];
+        $executor_class = $purgetools[$persistence]['executor'];
+        // Instanciate purger and executor
+        $purger = new $purge_class($this->getManager($persistence));
+        $executor = new $purge_class($this->getManager($persistence), $purger);
+        // purge
         $executor->purge();
+    }
+
+    /**
+     * Returns a doctrine object manager for the given persistence layer
+     * @return ObjectManager
+     */
+    public function getManager($persistence){
+        $managers = array(
+            'orm'       => 'doctrine',
+            'mongodb'   => 'doctrine.odm.mongodb',
+        );
+        return $this->kernel->getContainer()
+            ->get($managers[$persistence])->getManager();
+    }
+
+    /**
+     * @return string classname
+     */
+    public function getFixtureClass($persistence){
+        $classes = array(
+            'orm'       => 'Khepin\YamlFixturesBundle\Fixture\OrmYamlFixture',
+            'mongodb'   => 'Khepin\YamlFixturesBundle\Fixture\MongoYamlFixture'
+        );
+        return $classes[$persistence];
     }
 
 }

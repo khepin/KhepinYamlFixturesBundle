@@ -12,7 +12,6 @@
     <services>
         <service id="khepin.yaml_loader" class="Khepin\YamlFixturesBundle\Loader\YamlLoader">
             <argument type="service" id="kernel" />
-            <argument type="service" id="doctrine" />
             <argument>%khepin_yaml_fixtures.resources%</argument>
         </service>
     </services>
