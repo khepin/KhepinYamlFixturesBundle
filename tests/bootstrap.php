@@ -11,29 +11,7 @@ if (!class_exists('PHPUnit_Framework_MockObject_MockBuilder')) {
 }
 
 define('TESTS_PATH', __DIR__);
-define('VENDOR_PATH', realpath(__DIR__ . '/../vendor'));
-
-$classLoaderFile = VENDOR_PATH . '/Symfony/Component/ClassLoader/UniversalClassLoader.php';
-if (!file_exists($classLoaderFile)) {
-    die('cannot find vendor, run: php bin/vendors.php');
-}
-require_once $classLoaderFile;
-$loader = new Symfony\Component\ClassLoader\UniversalClassLoader;
-$loader->registerNamespaces(array(
-    'Symfony'                           => VENDOR_PATH,
-    'Doctrine\\Common'                  => VENDOR_PATH.'/doctrine-common/lib',
-    'Doctrine\\Common\\DataFixtures'    => VENDOR_PATH.'/doctrine-data-fixtures/lib',
-    'Doctrine\\DBAL'                    => VENDOR_PATH.'/doctrine-dbal/lib',
-    'Doctrine\\ORM'                     => VENDOR_PATH.'/doctrine-orm/lib',
-    'Mockery'                           => VENDOR_PATH.'/Mockery/library',
-    'Khepin'                            => __DIR__,
-));
-
-$loader->registerPrefixes(array(
-    'Mockery'                        => VENDOR_PATH . '/Mockery/library',
-));
-
-$loader->register();
+require_once __DIR__.'/../vendor/.composer/autoload.php';
 
 spl_autoload_register(function($class) {
     if (0 === strpos($class, 'Khepin\\YamlFixturesBundle\\')) {
@@ -47,7 +25,7 @@ spl_autoload_register(function($class) {
 });
 
 Doctrine\Common\Annotations\AnnotationRegistry::registerFile(
-    VENDOR_PATH.'/doctrine-orm/lib/Doctrine/ORM/Mapping/Driver/DoctrineAnnotations.php'
+    __DIR__.'/../vendor/doctrine/orm/lib/Doctrine/ORM/Mapping/Driver/DoctrineAnnotations.php'
 );
 
 $reader = new \Doctrine\Common\Annotations\AnnotationReader();
