@@ -65,6 +65,7 @@ Fixture files are to be written in this format:
     model: Name\Space\MyBundle\Entity\User
     tags: [ test, dev, prod ] # optional parameter
     save_in_reverse: false # optional parameter
+    persistence: orm (default)| mongodb
     fixtures:
         michael:
             name: Michael
