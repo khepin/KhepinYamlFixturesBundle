@@ -1,27 +1,19 @@
 This bundles provides you with a way to use YAML based fixtures for Symfony2 and
-Doctrine2. Basic features are already implemented and usable but more are coming.
+Doctrine2. It currently works with either Doctrine ORM or Doctrine MongoDB ODM.
 
 **Travic CI status:** [![Build Status](https://secure.travis-ci.org/khepin/KhepinYamlFixturesBundle.png?branch=master)](http://travis-ci.org/khepin/KhepinYamlFixturesBundle)
 
 # Installation
 
-This bundle depends on the [DoctrineFixturesBundle](http://symfony.com/doc/2.0/bundles/DoctrineFixturesBundle/index.html). If you don't have configured it with Symfony2 yet, follow the [setup instructions](http://symfony.com/doc/2.0/bundles/DoctrineFixturesBundle/index.html#setup-and-configuration).
+This bundle depends on the [DoctrineFixturesBundle](http://symfony.com/doc/2.0/bundles/DoctrineFixturesBundle/index.html). If you don't have configured it 
+with Symfony2 yet, follow the
+[setup instructions](http://symfony.com/doc/2.0/bundles/DoctrineFixturesBundle/index.html#setup-and-configuration).
 
-Next, through the deps files add:
+Through [Composer](http://getcomposer.org), add:
 
-    [KhepinYamlFixturesBundle]
-        git=https://github.com/khepin/KhepinYamlFixturesBundle.git
-        target=/bundles/Khepin/YamlFixturesBundle
-
-Run your vendor script `./bin/vendors install`.
-
-In your `autoload.php` register the Khepin namespace:
-
-    $loader->registerNamespaces(array(
-        // ...
-        'Khepin'           => __DIR__.'/../vendor/bundles',
-        // ...
-    ));
+    "require": {
+        "khepin/yaml-fixtures-bundle": "vO.4.*"
+    }
 
 Then register the bundle in `AppKernel.php` it's better to only register it in 
 the dev environment as it shouldn't be needed elsewhere.
@@ -65,7 +57,7 @@ Fixture files are to be written in this format:
     model: Name\Space\MyBundle\Entity\User
     tags: [ test, dev, prod ] # optional parameter
     save_in_reverse: false # optional parameter
-    persistence: orm (default)| mongodb
+    persistence: orm (default)| mongodb # lets you choose if these fixtures should be saved through the orm or through mongodb.
     fixtures:
         michael:
             name: Michael
@@ -79,6 +71,17 @@ You can use references to previously created fixtures:
         audi_a3:
             owner: michael
             since: "2010-12-12" #dates NEED to be set inside quotes
+
+For MongoDB's reference many, just put a list of references:
+
+    model: Name\Space\Bundle\Document\Car
+    persistence: mongodb
+    fixtures:
+        audi_a3:
+            owners:
+                - michael
+                - paul
+                - angella
 
 You can also define as many files as you want for the same entity. This will be
 useful when used together with context tags (see below).
