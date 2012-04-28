@@ -13,3 +13,4 @@ fixtures:
     cars:
       - mercedes
       - bmw
+      - renault
