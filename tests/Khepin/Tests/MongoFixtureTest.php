@@ -22,9 +22,6 @@ class MongoFixtureTest extends BaseTestCaseMongo {
                         'getContainer'   => $container
                 )
         );
-    }
-
-    public function tearDown(){
         $loader = new YamlLoader($this->kernel, array('SomeBundle'));
         $loader->purgeDatabase('mongodb');
     }
@@ -75,7 +72,7 @@ class MongoFixtureTest extends BaseTestCaseMongo {
         
         $repo = $this->doctrine->getManager()->getRepository('Khepin\Fixture\Document\Driver');
         $driver = $repo->findOneBy(array('name' => 'Mom'));
-        $this->assertEquals($driver->getCars()->count(), 2);
+        $this->assertEquals($driver->getCars()->count(), 3);
         $cars = $driver->getCars();
         $car = $cars[0];
         $this->assertEquals('Mercedes', $car->getName());
