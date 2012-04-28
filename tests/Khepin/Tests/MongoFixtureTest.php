@@ -12,10 +12,15 @@ class MongoFixtureTest extends BaseTestCaseMongo {
 
     public function setUp() {
         $this->getDoctrine();
-        $container = m::mock('Container', array(
-                'get' => $this->doctrine,
-                )
-        );
+        $service = m::mock()->shouldReceive('lowerCaseName')->withAnyArgs()->andReturnUsing(
+                function($car){
+                        $car->setName(strtolower($car->getName()));
+                }
+        )->mock();
+        $container = m::mock('Container')
+                ->shouldReceive('get')->with('my_service')->andReturn($service)
+                ->shouldReceive('get')->withAnyArgs()->andReturn($this->doctrine)
+                ->mock();
         $this->kernel = m::mock(
                 'AppKernel', array(
                         'locateResource' => __DIR__ . '/mongo/',
@@ -78,7 +83,14 @@ class MongoFixtureTest extends BaseTestCaseMongo {
         $this->assertEquals('Mercedes', $car->getName());
         $driver = $repo->findOneBy(array('name' => 'Dad'));
         $this->assertEquals($driver->getCars()->count(), 3);
+    }
+
+    public function testServiceCalls(){
+        $loader = new YamlLoader($this->kernel, array('SomeBundle'));
+        $loader->loadFixtures('service');
         
-        // $this->assertEquals(get_class($driver->getCar()), 'Khepin\Fixture\Entity\Car');
+        $repo = $this->doctrine->getManager()->getRepository('Khepin\Fixture\Document\Car');
+        $car = $repo->findOneBy(array('name' => 'toyota'));
+        $this->assertTrue('toyota' === $car->getName());
     }
 }

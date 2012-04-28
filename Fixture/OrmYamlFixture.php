@@ -42,6 +42,7 @@ class OrmYamlFixture extends AbstractFixture {
                     $object->$method($value);
                 }
             }
+            $this->runServiceCalls($object);
             // Save a reference to the current object
             $this->loader->setReference($reference, $object);
             if(!$this->isReverseSaveOrder()){

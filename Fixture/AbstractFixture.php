@@ -20,7 +20,6 @@ class AbstractFixture {
         $this->loader = $loader;
     }
     
-
     /**
      * Returns if the given tag is set for the current fixture
      * @param type $tag
@@ -32,5 +31,18 @@ class AbstractFixture {
             return true;
         }
         return false;
+    }
+
+    /**
+     * @param the object on which to run the service calls
+     */
+    public function runServiceCalls($object){
+        if(isset($this->file['service_calls'])){
+            foreach($this->file['service_calls'] as $call){
+                $s = $this->loader->getService($call['service']);
+                $m = $call['method'];
+                $s->$m($object);
+            }
+        }
     }
 }

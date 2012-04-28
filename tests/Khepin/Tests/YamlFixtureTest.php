@@ -12,10 +12,15 @@ class YamlFixtureTest extends BaseTestCaseOrm {
 
     public function setUp() {
         $this->getDoctrine();
-        $container = m::mock('Container', array(
-                'get' => $this->doctrine,
-                )
-        );
+        $service = m::mock()->shouldReceive('lowerCaseName')->withAnyArgs()->andReturnUsing(
+                function($car){
+                        $car->setName(strtolower($car->getName()));
+                }
+        )->mock();
+        $container = m::mock('Container')
+                ->shouldReceive('get')->with('my_service')->andReturn($service)
+                ->shouldReceive('get')->withAnyArgs()->andReturn($this->doctrine)
+                ->mock();
         $this->kernel = m::mock(
                 'AppKernel', array(
                         'locateResource' => __DIR__ . '/simple_loading/',
@@ -101,6 +106,15 @@ class YamlFixtureTest extends BaseTestCaseOrm {
         $this->assertEquals($driver->getCar()->getName(), 'BMW');
         $this->assertEquals(get_class($driver->getSecondCar()), 'Khepin\Fixture\Entity\Car');
         $this->assertEquals($driver->getSecondCar()->getName(), 'Mercedes');
+    }
+
+    public function testServiceCalls(){
+        $loader = new YamlLoader($this->kernel, array('SomeBundle'));
+        $loader->loadFixtures('service');
+        
+        $repo = $this->doctrine->getManager()->getRepository('Khepin\Fixture\Entity\Car');
+        $car = $repo->findOneByName('toyota');
+        $this->assertTrue('toyota' === $car->getName());
     }
 
 }

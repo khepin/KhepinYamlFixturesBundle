@@ -80,7 +80,7 @@ class YamlLoader {
     }
 
     /**
-     * Loads the fixtures file by file and saves them to the database 
+     * Loads the fixtures file by file and saves them to the database
      */
     public function loadFixtures() {
         $this->loadFixtureFiles();
@@ -147,6 +147,13 @@ class YamlLoader {
             'mongodb'   => 'Khepin\YamlFixturesBundle\Fixture\MongoYamlFixture'
         );
         return $classes[$persistence];
+    }
+
+    /**
+     * @return the service with given id
+     */
+    public function getService($service_id){
+        return $this->kernel->getContainer()->get($service_id);
     }
 
 }

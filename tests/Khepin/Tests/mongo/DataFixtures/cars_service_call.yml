@@ -1,0 +1,10 @@
+model: Khepin\Fixture\Document\Car
+persistence: mongodb
+tags: [ service]
+service_calls:
+    test_service:
+        service: my_service
+        method: lowerCaseName
+fixtures:
+  toyota:
+    name: TOYOTA

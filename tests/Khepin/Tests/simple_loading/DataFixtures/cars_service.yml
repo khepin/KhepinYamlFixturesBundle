@@ -1,0 +1,9 @@
+model: Khepin\Fixture\Entity\Car
+tags: [ service ]
+service_calls:
+    lowercase_name:
+        service: my_service
+        method: lowerCaseName
+fixtures:
+  toyota:
+    name: TOYOTA

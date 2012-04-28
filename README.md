@@ -158,6 +158,29 @@ Save in reverse will create the objects in this order so the references are set
 properly and then save them in the opposite order so there is no exception when 
 purging the database.
 
+## Service calls
+
+Some entities require being managed by a special service before they can be persisted.
+This is the case with FOSUserBundle for example where the right password is set 
+by the `user_manager` and not directly in the user class. Therefore we need to 
+ask this service to set our domain object in the correct state before it can be
+persisted. Service calls are declared this way:
+
+    model: My\NameSpace\User
+    service_calls:
+        service_1:
+            service: fos_user.user_manager # this is the service id in the container
+            method: updateUser # the method to be called on the object
+    fixtures:
+      dad:
+        name: Francois
+        plain_password: thisismypassword
+
+Now for each user, before it is persisted, something equivalent to the following
+code will happen:
+
+    $container->get('fos_user.user_manager')->updateUser($user_francois);
+
 ## Using ACLs
 
 If you need to set ACL entries on your fixtures, it is possible. The ACLs are
