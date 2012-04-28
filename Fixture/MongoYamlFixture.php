@@ -31,8 +31,8 @@ class MongoYamlFixture extends AbstractFixture {
                     
                     if($type == 'many'){
                         $method = Inflector::camelize('add_'.$field);
-                        foreach($value as $reference){
-                            $object->$method($this->loader->getReference($reference));
+                        foreach($value as $reference_object){
+                            $object->$method($this->loader->getReference($reference_object));
                         }
                     } else {
                         if ($type == 'datetime' OR $type == 'date') {
