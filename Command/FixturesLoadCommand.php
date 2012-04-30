@@ -25,7 +25,7 @@ class FixturesLoadCommand extends ContainerAwareCommand {
         if ($input->getOption('purge-orm')) {
             $this->getContainer()->get('khepin.yaml_loader')->purgeDatabase('orm');
         }
-        if ($input->getOption('purge-orm')) {
+        if ($input->getOption('purge-mongodb')) {
             $this->getContainer()->get('khepin.yaml_loader')->purgeDatabase('mongodb');
         }
         
