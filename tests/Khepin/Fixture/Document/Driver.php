@@ -20,6 +20,11 @@ class Driver {
     private $cars = array();
 
     /**
+     * @ODM\ReferenceOne(targetDocument="Car")
+     */
+    private $preferred_car;
+
+    /**
      * @ODM\String
      * @var type
      */
@@ -43,5 +48,13 @@ class Driver {
 
     public function setName($name){
         $this->name = $name;
+    }
+
+    public function setPreferredCar($car){
+        $this->preferred_car = $car;
+    }
+
+    public function getPreferredCar(){
+        return $this->preferred_car;
     }
 }

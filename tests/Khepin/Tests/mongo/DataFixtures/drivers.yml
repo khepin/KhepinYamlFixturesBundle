@@ -10,6 +10,7 @@ fixtures:
       - citroen
   mom:
     name: Mom
+    preferred_car: mercedes
     cars:
       - mercedes
       - bmw

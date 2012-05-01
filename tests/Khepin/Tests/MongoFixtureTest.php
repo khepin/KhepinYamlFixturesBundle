@@ -70,6 +70,17 @@ class MongoFixtureTest extends BaseTestCaseMongo {
         $car = $repo->findOneBy(array('name' => 'BMW'));
         $this->assertEquals('BMW', $car->getName());
     }
+
+    public function testReferenceOne(){
+        $loader = new YamlLoader($this->kernel, array('SomeBundle'));
+        $loader->loadFixtures('with_drivers', 'family_cars');
+
+        $repo = $this->doctrine->getManager()->getRepository('Khepin\Fixture\Document\Driver');
+        $driver = $repo->findOneBy(array('name' => 'Mom'));
+
+        $this->assertEquals('Mercedes', $driver->getPreferredCar()->getName());
+        $this->assertNotEquals('BMW', $driver->getPreferredCar()->getName());
+    }
     
     public function testReferenceMany(){
         $loader = new YamlLoader($this->kernel, array('SomeBundle'));

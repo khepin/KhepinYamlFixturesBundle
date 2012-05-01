@@ -28,7 +28,7 @@ class MongoYamlFixture extends AbstractFixture {
                 if (in_array($field, $mapping)) {
                     // Dates need to be converted to DateTime objects
                     $type = $metadata->fieldMappings[$field]['type'];
-                    
+
                     if($type == 'many'){
                         $method = Inflector::camelize('add_'.$field);
                         foreach($value as $reference_object){
@@ -37,6 +37,9 @@ class MongoYamlFixture extends AbstractFixture {
                     } else {
                         if ($type == 'datetime' OR $type == 'date') {
                             $value = new \DateTime($value);
+                        }
+                        if($type == 'one'){
+                            $value = $this->loader->getReference($value);
                         }
                         $object->$method($value);
                     }
