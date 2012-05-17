@@ -9,10 +9,10 @@ This bundle depends on the [DoctrineFixturesBundle](http://symfony.com/doc/2.0/b
 with Symfony2 yet, follow the
 [setup instructions](http://symfony.com/doc/2.0/bundles/DoctrineFixturesBundle/index.html#setup-and-configuration).
 
-Through [Composer](http://getcomposer.org), add:
+Through [Composer](http://getcomposer.org), add to composer.json:
 
     "require": {
-        "khepin/yaml-fixtures-bundle": "vO.4.*"
+        "khepin/yaml-fixtures-bundle": "O.5.*"
     }
 
 Then register the bundle in `AppKernel.php` it's better to only register it in 
