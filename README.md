@@ -218,12 +218,3 @@ Example:
 Be careful that the ACLs in Symfony are not managed through Doctrine and 
 therefore will not be purged when you re-create your fixtures. However if 
 any conflicts, loading the ACLs will overwrite all previous ACL entries.
-
-# Limitations
-
-- The ordering of file loading might not be sufficient YET for people who need 
-to load from Bundle A then B and then A again.
-- There is no support for mongodb or couchdb. As I personally use mongo on some
-projects, this will come at some point.
-- It probably has a lot of bugs and edge cases that have not been tested yet as 
-I did not encounter them so far.
