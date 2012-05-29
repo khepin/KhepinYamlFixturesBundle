@@ -11,59 +11,33 @@ class MongoYamlFixture extends AbstractFixture {
         if(!$this->hasTag($tags)){
             return;
         }
-        $cmf = $manager->getMetadataFactory();
-        // The model class for all fixtures defined in this file
         $class = $this->file['model'];
         // Get the fields that are not "associations"
-        $metadata = $cmf->getMetaDataFor($class);
-        $mapping = array_keys($metadata->fieldMappings);
+        $metadata = $this->getMetaDataForClass($class);
 
-        foreach ($this->file['fixtures'] as $reference => $fixture) {
-            // Instantiate new object
-            $object = new $class;
-            foreach ($fixture as $field => $value) {
-                // Add the fields defined in the fistures file
-                $method = Inflector::camelize('set_' . $field);
-                // 
-                if (in_array($field, $mapping)) {
-                    // Dates need to be converted to DateTime objects
-                    $type = $metadata->fieldMappings[$field]['type'];
-
-                    if($type == 'many'){
-                        $method = Inflector::camelize('add_'.$field);
-                        foreach($value as $reference_object){
-                            $object->$method($this->loader->getReference($reference_object));
-                        }
-                    } else {
-                        if ($type == 'datetime' OR $type == 'date') {
-                            $value = new \DateTime($value);
-                        }
-                        if($type == 'one'){
-                            $value = $this->loader->getReference($value);
-                        }
-                        $object->$method($value);
-                    }
-                } else {
-                    // It's a method call that will set a field named differently
-                    // eg: FOSUserBundle ->setPlainPassword sets the password after
-                    // Encrypting it
-                    $object->$method($value);
-                }
-            }
-            $this->runServiceCalls($object);
-            // Save a reference to the current object
+        foreach ($this->file['fixtures'] as $reference => $fixture_data) {
+            $object = $this->createObject($class, $fixture_data, $metadata);
             $this->loader->setReference($reference, $object);
             if(!$this->isReverseSaveOrder()){
                 $manager->persist($object);
             }
         }
+
         if($this->isReverseSaveOrder()){
             $refs = array_keys($this->file['fixtures']);
             for($i = (count($refs) - 1); $i>=0; $i--){
                 $manager->persist($this->loader->getReference($refs[$i]));
             }
         }
+
         $manager->flush();
+    }
+
+    public function getMetadataForClass($class){
+        $manager = $this->loader->getManager('mongodb');
+        $cmf = $manager->getMetadataFactory();
+
+        return $cmf->getMetaDataFor($class);
     }
     
     /**
@@ -76,5 +50,51 @@ class MongoYamlFixture extends AbstractFixture {
             return false;
         }
         return true;
+    }
+
+    public function createObject($class, $data, $metadata, $embedded = false){
+        $mapping = array_keys($metadata->fieldMappings);
+        // Instantiate new object
+        $object = new $class;
+        foreach ($data as $field => $value) {
+            // Add the fields defined in the fixtures file
+            $method = Inflector::camelize('set_' . $field);
+            // This is a standard field
+            if (in_array($field, $mapping)) {
+                // Dates need to be converted to DateTime objects
+                $type = $metadata->fieldMappings[$field]['type'];
+
+                if($type == 'many'){
+                    $method = Inflector::camelize('add_'.$field);
+                    foreach($value as $reference_object){
+                        $object->$method($this->loader->getReference($reference_object));
+                    }
+                } else {
+                    if ($type == 'datetime' OR $type == 'date') {
+                        $value = new \DateTime($value);
+                    }
+                    if($type == 'one'){
+                        if(isset($metadata->fieldMappings[$field]['embedded']) && $metadata->fieldMappings[$field]['embedded']){
+                            $embed_class = $metadata->fieldMappings[$field]['targetDocument'];
+                            $embed_data = $value;
+                            $embed_meta = $this->getMetaDataForClass($embed_class);
+                            $value = $this->createObject($embed_class, $embed_data, $embed_meta, true);
+                        } else {
+                            $value = $this->loader->getReference($value);
+                        }
+                    }
+                    $object->$method($value);
+                }
+            } else {
+                // The key is not a field's name but the name of a method to be called
+                $object->$method($value);
+            }
+        }
+        // Save a reference to the current object
+        if(!$embedded){
+            $this->runServiceCalls($object);
+        }
+        
+        return $object;
     }
 }
