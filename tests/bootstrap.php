@@ -11,7 +11,7 @@ if (!class_exists('PHPUnit_Framework_MockObject_MockBuilder')) {
 }
 
 define('TESTS_PATH', __DIR__);
-require_once __DIR__.'/../vendor/.composer/autoload.php';
+require_once __DIR__.'/../vendor/autoload.php';
 
 spl_autoload_register(function($class) {
     if (0 === strpos($class, 'Khepin\\YamlFixturesBundle\\')) {
