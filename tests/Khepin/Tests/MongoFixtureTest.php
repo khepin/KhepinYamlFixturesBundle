@@ -104,4 +104,19 @@ class MongoFixtureTest extends BaseTestCaseMongo {
         $car = $repo->findOneBy(array('name' => 'toyota'));
         $this->assertTrue('toyota' === $car->getName());
     }
+
+    public function testEmbeddedDocs(){
+        $loader = new YamlLoader($this->kernel, array('SomeBundle'));
+        $loader->loadFixtures('embedded_docs');
+
+        $repo = $this->doctrine->getManager()->getRepository('Khepin\Fixture\Document\Article');
+        $articles = $repo->findAll();
+        $this->assertEquals($articles->count(), 1);
+        $article = $articles->getNext();
+        $this->assertInstanceOf('Khepin\Fixture\Document\Article', $article);
+        $author = $article->getAuthor();
+        $this->assertInstanceOf('Khepin\Fixture\Document\Author', $author);
+
+        $this->assertEquals($author->getName(), 'Paul');
+    }
 }
