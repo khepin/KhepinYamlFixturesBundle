@@ -1,5 +1,6 @@
 This bundles provides you with a way to use YAML based fixtures for Symfony2 and
 Doctrine2. It currently works with either Doctrine ORM or Doctrine MongoDB ODM.
+Other backend are not implemented yet but can be implemented very easily.
 
 **Travic CI status:** [![Build Status](https://secure.travis-ci.org/khepin/KhepinYamlFixturesBundle.png?branch=master)](http://travis-ci.org/khepin/KhepinYamlFixturesBundle)
 
@@ -85,6 +86,20 @@ For MongoDB's reference many, just put a list of references:
 
 You can also define as many files as you want for the same entity. This will be
 useful when used together with context tags (see below).
+
+## Mongo embedded documents
+
+It's possible to use embedded documents in mongo (only embed_one is implemented
+at this time). Just keep cascading your yaml file like this:
+
+    model: Name\Space\Bundle\Document\Article
+    persistence: mongodb
+    fixtures:
+        first_post:
+            title: Ouelkom to my niew blog!
+            content: I will update regularly!
+            author: # This defines an embedded document
+                name: khepin # this will be set on the embedded document
 
 # Usage
 
@@ -218,12 +233,3 @@ Example:
 Be careful that the ACLs in Symfony are not managed through Doctrine and 
 therefore will not be purged when you re-create your fixtures. However if 
 any conflicts, loading the ACLs will overwrite all previous ACL entries.
-
-# Limitations
-
-- The ordering of file loading might not be sufficient YET for people who need 
-to load from Bundle A then B and then A again.
-- There is no support for mongodb or couchdb. As I personally use mongo on some
-projects, this will come at some point.
-- It probably has a lot of bugs and edge cases that have not been tested yet as 
-I did not encounter them so far.
