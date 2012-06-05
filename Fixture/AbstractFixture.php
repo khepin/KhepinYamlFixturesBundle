@@ -3,14 +3,17 @@
 namespace Khepin\YamlFixturesBundle\Fixture;
 
 use Symfony\Component\Yaml\Yaml;
+use Doctrine\Common\Persistence\ObjectManager;
 
-class AbstractFixture {
+abstract class AbstractFixture {
 
     protected $tags = array();
     
     protected $file;
     
     protected $loader;
+
+    protected $manager;
     
     public function __construct(array $data, $loader) {
         $this->file = $data;
@@ -45,4 +48,60 @@ class AbstractFixture {
             }
         }
     }
+
+    public function load(ObjectManager $manager, $tags = null) {
+        if(!$this->hasTag($tags)){
+            return;
+        }
+        $this->manager = $manager;
+        $class = $this->file['model'];
+        // Get the fields that are not "associations"
+        $metadata = $this->getMetaDataForClass($class);
+
+        foreach ($this->file['fixtures'] as $reference => $fixture_data) {
+            $object = $this->createObject($class, $fixture_data, $metadata);
+            $this->loader->setReference($reference, $object);
+            if(!$this->isReverseSaveOrder()){
+                $manager->persist($object);
+            }
+        }
+
+        if($this->isReverseSaveOrder()){
+            $refs = array_keys($this->file['fixtures']);
+            for($i = (count($refs) - 1); $i>=0; $i--){
+                $manager->persist($this->loader->getReference($refs[$i]));
+            }
+        }
+
+        $manager->flush();
+    }
+
+    public function getMetadataForClass($class){
+        $cmf = $this->manager->getMetadataFactory();
+
+        return $cmf->getMetaDataFor($class);
+    }
+
+    /**
+     * For fixtures that have relations to the same table, they need to appear
+     * in the opposite order that they need to be saved.
+     * @return boolean 
+     */
+    public function isReverseSaveOrder(){
+        if(!isset($this->file['save_in_reverse']) || $this->file['save_in_reverse'] == false){
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Creates and returns one object based on the given data and metadata
+     *
+     * @param $class object's class name
+     * @param $data array of the object's fixture data
+     * @param $metadata the class metadata for doctrine
+     * @param $options options specific to each implementation
+     * @return Object
+     */
+    public abstract function createObject($class, $data, $metadata, $options = array());
 }
