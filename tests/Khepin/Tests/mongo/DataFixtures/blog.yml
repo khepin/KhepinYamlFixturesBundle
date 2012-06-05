@@ -1,0 +1,9 @@
+model: Khepin\Fixture\Document\Article
+persistence: mongodb
+tags: [embedded_docs]
+fixtures:
+  first_post:
+    title: YAML rocks
+    content: It really does
+    author:
+        name: Paul

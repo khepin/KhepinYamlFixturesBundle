@@ -74,6 +74,7 @@ class MongoYamlFixture extends AbstractFixture {
                         $value = new \DateTime($value);
                     }
                     if($type == 'one'){
+                        // This is an embedded document
                         if(isset($metadata->fieldMappings[$field]['embedded']) && $metadata->fieldMappings[$field]['embedded']){
                             $embed_class = $metadata->fieldMappings[$field]['targetDocument'];
                             $embed_data = $value;
