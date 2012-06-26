@@ -177,7 +177,7 @@ purging the database.
 
 If you want to pass an array of already created objects to a *-To-Many assocation, you
 can do this by first allowing your setter on the object to accept a plain PHP array
-(as opposed to only accepting a Doctirine\Common\ArrayCollection) and then define your
+(as opposed to only accepting a Doctrine\Common\ArrayCollection) and then define your
 YAML file as follows:
 
     fixtures:
