@@ -22,8 +22,16 @@ class OrmYamlFixture extends AbstractFixture {
                     $value = new \DateTime($value);
                 }
                 $object->$method($value);
-            } else if (in_array($field, $associations)) { // This field is an association, we load it from the references
-                $object->$method($this->loader->getReference($value));
+            } else if (in_array($field, $associations)) { // This field is an association
+                if (is_array($value)) { // The field is an array of associations
+                    $referenceArray = array();
+                    foreach ($value as $referenceObject) {
+                        $referenceArray[] = $this->loader->getReference($referenceObject);
+                    }
+                    $object->$method($referenceArray);
+                } else {
+                    $object->$method($this->loader->getReference($value));
+                }
             } else {
                 // It's a method call that will set a field named differently
                 // eg: FOSUserBundle ->setPlainPassword sets the password after
