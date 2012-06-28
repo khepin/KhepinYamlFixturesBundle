@@ -95,7 +95,8 @@ class BaseTestCaseOrm extends \PHPUnit_Framework_TestCase {
 
         $entities = array(
             'Khepin\\Fixture\\Entity\\Car',
-            'Khepin\\Fixture\\Entity\\Driver'
+            'Khepin\\Fixture\\Entity\\Driver',
+            'Khepin\\Fixture\\Entity\\Owner'
         );
 
         $schema = array_map(function($class) use ($em) {
