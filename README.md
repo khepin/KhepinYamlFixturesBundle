@@ -173,6 +173,27 @@ Save in reverse will create the objects in this order so the references are set
 properly and then save them in the opposite order so there is no exception when 
 purging the database.
 
+## Handling ORM One-To-Many or Many-To-Many Associations
+
+If you want to pass an array of already created objects to a *-To-Many assocation, you
+can do this by first allowing your setter on the object to accept a plain PHP array
+(as opposed to only accepting a Doctrine\Common\ArrayCollection) and then define your
+YAML file as follows:
+
+    fixtures:
+        car:
+            name: foo_bar
+            parts:
+                - part_one
+                - part_two
+                - part_three
+
+This is assuming of course that part_one, part_two, and part_three are objects you
+already defined in previously loaded files.
+
+The YAML loader will create a plain PHP array of the three objects and pass it to,
+for example, setParts() on the model you are defining in this file.
+
 ## Service calls
 
 Some entities require being managed by a special service before they can be persisted.

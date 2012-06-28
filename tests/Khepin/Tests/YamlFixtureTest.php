@@ -117,4 +117,21 @@ class YamlFixtureTest extends BaseTestCaseOrm {
         $this->assertTrue('toyota' === $car->getName());
     }
 
+    public function testArrayAssociation()
+    {
+        $loader = new YamlLoader($this->kernel, array('SomeBundle'));
+        $loader->loadFixtures();
+
+        $em   = $this->doctrine->getEntityManager();
+        $owner = $em->getRepository('Khepin\Fixture\Entity\Owner')->findOneById(1);
+        $this->assertEquals(2, count($owner->getOwnedCars()));
+
+        $car1 = $owner->getOwnedCars()->get(0);
+        $this->assertEquals(get_class($car1), 'Khepin\Fixture\Entity\Car');
+        $this->assertEquals('Mercedes', $car1->getName());
+
+        $car2 = $owner->getOwnedCars()->get(1);
+        $this->assertEquals(get_class($car2), 'Khepin\Fixture\Entity\Car');
+        $this->assertEquals('BMW', $car2->getName());
+    }
 }
