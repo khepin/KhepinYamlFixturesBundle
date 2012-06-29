@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityManager;
 use \Mockery as m;
 use Doctrine\ORM\Tools\SchemaTool;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
+use Doctrine\ORM\Mapping\DefaultQuoteStrategy;
 
 class BaseTestCaseOrm extends \PHPUnit_Framework_TestCase {
     
@@ -51,6 +52,14 @@ class BaseTestCaseOrm extends \PHPUnit_Framework_TestCase {
                 ->will($this->returnValue('Doctrine\\ORM\\EntityRepository'))
         ;
 
+        $quoteStrategy = new DefaultQuoteStrategy();
+
+        $config
+            ->expects($this->any())
+            ->method('getQuoteStrategy')
+            ->will($this->returnValue($quoteStrategy))
+        ;
+
         return $config;
     }
 
@@ -86,7 +95,8 @@ class BaseTestCaseOrm extends \PHPUnit_Framework_TestCase {
 
         $entities = array(
             'Khepin\\Fixture\\Entity\\Car',
-            'Khepin\\Fixture\\Entity\\Driver'
+            'Khepin\\Fixture\\Entity\\Driver',
+            'Khepin\\Fixture\\Entity\\Owner'
         );
 
         $schema = array_map(function($class) use ($em) {

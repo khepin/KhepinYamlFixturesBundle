@@ -26,6 +26,12 @@ class Car {
      * @var type 
      */
     private $date_purchased;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Owner")
+     * @var Owner
+     */
+    private $owner;
     
     public function getId(){
         return $this->id;
@@ -45,5 +51,21 @@ class Car {
     
     public function setDatePurchased(\DateTime $date_purchased){
         $this->date_purchased = $date_purchased;
+    }
+
+    /**
+     * @param Owner $owner
+     */
+    public function setOwner($owner)
+    {
+        $this->owner = $owner;
+    }
+
+    /**
+     * @return Owner
+     */
+    public function getOwner()
+    {
+        return $this->owner;
     }
 }
