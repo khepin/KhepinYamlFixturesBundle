@@ -13,7 +13,7 @@ with Symfony2 yet, follow the
 Through [Composer](http://getcomposer.org), add to composer.json:
 
     "require": {
-        "khepin/yaml-fixtures-bundle": "O.6.*"
+        "khepin/yaml-fixtures-bundle": "0.6.*"
     }
 
 Then register the bundle in `AppKernel.php` it's better to only register it in 
