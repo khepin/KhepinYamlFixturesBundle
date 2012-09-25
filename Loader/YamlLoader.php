@@ -132,7 +132,7 @@ class YamlLoader {
     public function getManager($persistence){
         $managers = array(
             'orm'       => 'doctrine',
-            'mongodb'   => 'doctrine.odm.mongodb',
+            'mongodb'   => 'doctrine_mongodb',
         );
         return $this->kernel->getContainer()
             ->get($managers[$persistence])->getManager();
