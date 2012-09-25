@@ -13,38 +13,46 @@ class YamlLoader {
 
     /**
      *
-     * @var type 
+     * @var type
      */
     private $kernel;
 
     /**
      * Doctrine entity manager
-     * @var type 
+     * @var type
      */
     private $object_manager;
-    
+
     private $acl_manager = null;
 
     /**
      * Array of all yml files containing fixtures that should be loaded
-     * @var type 
+     * @var type
      */
     private $fixture_files = array();
 
     /**
      * Maintains references to already created objects
-     * @var type 
+     * @var type
      */
     private $references = array();
 
-    public function __construct(\AppKernel $kernel, $bundles) {
+    /**
+     * The directory containing the fixtures files
+     *
+     * @var string
+     */
+    private $directory;
+
+    public function __construct(\AppKernel $kernel, $bundles, $directory) {
         $this->bundles = $bundles;
         $this->kernel = $kernel;
+        $this->directory = $directory;
     }
 
     /**
-     * 
-     * @param type $manager 
+     *
+     * @param type $manager
      */
     public function setAclManager($manager = null) {
         $this->acl_manager = $manager;
@@ -53,7 +61,7 @@ class YamlLoader {
     /**
      * Returns a previously saved reference
      * @param type $reference_name
-     * @return type 
+     * @return type
      */
     public function getReference($reference_name) {
         return !is_null($reference_name) ? $this->references[$reference_name] : null;
@@ -62,7 +70,7 @@ class YamlLoader {
     /**
      * Sets a reference to an object
      * @param type $name
-     * @param type $object 
+     * @param type $object
      */
     public function setReference($name, $object) {
         $this->references[$name] = $object;
@@ -74,7 +82,7 @@ class YamlLoader {
     protected function loadFixtureFiles() {
         foreach ($this->bundles as $bundle) {
             $path = $this->kernel->locateResource('@' . $bundle);
-            $files = glob($path . 'DataFixtures/*.yml');
+            $files = glob($path . $this->directory . '/*.yml');
             $this->fixture_files = array_merge($this->fixture_files, $files);
         }
     }
@@ -102,7 +110,7 @@ class YamlLoader {
     }
 
     /**
-     * Remove all fixtures from the database 
+     * Remove all fixtures from the database
      */
     public function purgeDatabase($persistence) {
         $purgetools = array(

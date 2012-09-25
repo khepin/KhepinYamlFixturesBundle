@@ -19,11 +19,17 @@ class Configuration implements ConfigurationInterface
     {
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('khepin_yaml_fixtures');
+        $rootNode
+            ->children()
+                ->scalarNode('directory')->defaultValue('DataFixtures')->end()
+            ->end()
+        ;
+
         $this->addBundlesSection($rootNode);
-        
+
         return $treeBuilder;
     }
-    
+
     public function addBundlesSection($rootNode){
         $rootNode
             ->children()
