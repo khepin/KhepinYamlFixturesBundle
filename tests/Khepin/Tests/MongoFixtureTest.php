@@ -27,12 +27,12 @@ class MongoFixtureTest extends BaseTestCaseMongo {
                         'getContainer'   => $container
                 )
         );
-        $loader = new YamlLoader($this->kernel, array('SomeBundle'));
+        $loader = new YamlLoader($this->kernel, array('SomeBundle'), 'DataFixtures');
         $loader->purgeDatabase('mongodb');
     }
 
     public function testSimpleLoading() {
-        $loader = new YamlLoader($this->kernel, array('SomeBundle'));
+        $loader = new YamlLoader($this->kernel, array('SomeBundle'), 'DataFixtures');
         $loader->loadFixtures();
 
         $dm = $this->doctrine->getManager();
@@ -46,10 +46,10 @@ class MongoFixtureTest extends BaseTestCaseMongo {
     }
 
     public function testPurge(){
-        $loader = new YamlLoader($this->kernel, array('SomeBundle'));
+        $loader = new YamlLoader($this->kernel, array('SomeBundle'), 'DataFixtures');
         $loader->loadFixtures();
         $loader->purgeDatabase('mongodb');
-        
+
         $cars = $this->doctrine->getManager()->getRepository('Khepin\Fixture\Document\Car')->findAll();
         $this->assertEquals($cars->count(), 0);
         $drivers = $this->doctrine->getManager()->getRepository('Khepin\Fixture\Document\Driver')->findAll();
@@ -57,7 +57,7 @@ class MongoFixtureTest extends BaseTestCaseMongo {
     }
 
     public function testContext() {
-        $loader = new YamlLoader($this->kernel, array('SomeBundle'));
+        $loader = new YamlLoader($this->kernel, array('SomeBundle'), 'DataFixtures');
         $loader->loadFixtures('french_cars');
 
         $repo = $this->doctrine->getManager()->getRepository('Khepin\Fixture\Document\Car');
@@ -72,7 +72,7 @@ class MongoFixtureTest extends BaseTestCaseMongo {
     }
 
     public function testReferenceOne(){
-        $loader = new YamlLoader($this->kernel, array('SomeBundle'));
+        $loader = new YamlLoader($this->kernel, array('SomeBundle'), 'DataFixtures');
         $loader->loadFixtures('with_drivers', 'family_cars');
 
         $repo = $this->doctrine->getManager()->getRepository('Khepin\Fixture\Document\Driver');
@@ -81,11 +81,11 @@ class MongoFixtureTest extends BaseTestCaseMongo {
         $this->assertEquals('Mercedes', $driver->getPreferredCar()->getName());
         $this->assertNotEquals('BMW', $driver->getPreferredCar()->getName());
     }
-    
+
     public function testReferenceMany(){
-        $loader = new YamlLoader($this->kernel, array('SomeBundle'));
+        $loader = new YamlLoader($this->kernel, array('SomeBundle'), 'DataFixtures');
         $loader->loadFixtures('with_drivers', 'family_cars');
-        
+
         $repo = $this->doctrine->getManager()->getRepository('Khepin\Fixture\Document\Driver');
         $driver = $repo->findOneBy(array('name' => 'Mom'));
         $this->assertEquals($driver->getCars()->count(), 3);
@@ -97,16 +97,16 @@ class MongoFixtureTest extends BaseTestCaseMongo {
     }
 
     public function testServiceCalls(){
-        $loader = new YamlLoader($this->kernel, array('SomeBundle'));
+        $loader = new YamlLoader($this->kernel, array('SomeBundle'), 'DataFixtures');
         $loader->loadFixtures('service');
-        
+
         $repo = $this->doctrine->getManager()->getRepository('Khepin\Fixture\Document\Car');
         $car = $repo->findOneBy(array('name' => 'toyota'));
         $this->assertTrue('toyota' === $car->getName());
     }
 
     public function testEmbeddedDocs(){
-        $loader = new YamlLoader($this->kernel, array('SomeBundle'));
+        $loader = new YamlLoader($this->kernel, array('SomeBundle'), 'DataFixtures');
         $loader->loadFixtures('embedded_docs');
 
         $repo = $this->doctrine->getManager()->getRepository('Khepin\Fixture\Document\Article');
