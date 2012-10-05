@@ -105,9 +105,9 @@ class MongoFixtureTest extends BaseTestCaseMongo {
         $this->assertTrue('toyota' === $car->getName());
     }
 
-    public function testEmbeddedDocs(){
+    public function testEmbedOne(){
         $loader = new YamlLoader($this->kernel, array('SomeBundle'), 'DataFixtures');
-        $loader->loadFixtures('embedded_docs');
+        $loader->loadFixtures('embed_one');
 
         $repo = $this->doctrine->getManager()->getRepository('Khepin\Fixture\Document\Article');
         $articles = $repo->findAll();
