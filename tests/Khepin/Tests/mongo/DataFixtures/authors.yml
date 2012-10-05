@@ -1,9 +1,10 @@
 model: Khepin\Fixture\Document\Article
 persistence: mongodb
-tags: [embed_one]
+tags: [embed_many]
 fixtures:
   first_post:
     title: YAML rocks
     content: It really does
-    author:
-        name: Paul
+    tags:
+        - {name: YAML}
+        - {name: Configuration}
