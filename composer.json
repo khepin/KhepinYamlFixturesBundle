@@ -12,11 +12,14 @@
         }
     ],
     "require": {
-        "doctrine/doctrine-fixtures-bundle": "2.*",
+        "doctrine/data-fixtures": "dev-master",
+        "doctrine/doctrine-fixtures-bundle": "dev-master",
         "doctrine/orm": "2.*",
         "doctrine/doctrine-bundle": "dev-master"
     },
     "require-dev": {
+        "doctrine/mongodb-odm": "dev-master",
+        "doctrine/mongodb": "dev-master",
         "doctrine/mongodb-odm-bundle": "dev-master",
         "mockery/mockery": "dev-master"
     },
