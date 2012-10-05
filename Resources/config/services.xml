@@ -4,15 +4,17 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
-    
+
     <parameters>
         <parameter key="khepin_yaml_fixtures.resources"></parameter>
         <parameter key="khepin_yaml_fixtures.acl_manager"></parameter>
+        <parameter key="khepin_yaml_fixtures.directory"></parameter>
     </parameters>
     <services>
         <service id="khepin.yaml_loader" class="Khepin\YamlFixturesBundle\Loader\YamlLoader">
             <argument type="service" id="kernel" />
             <argument>%khepin_yaml_fixtures.resources%</argument>
+            <argument>%khepin_yaml_fixtures.directory%</argument>
         </service>
     </services>
 </container>

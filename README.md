@@ -6,7 +6,7 @@ Other backend are not implemented yet but can be implemented very easily.
 
 # Installation
 
-This bundle depends on the [DoctrineFixturesBundle](http://symfony.com/doc/2.0/bundles/DoctrineFixturesBundle/index.html). If you don't have configured it 
+This bundle depends on the [DoctrineFixturesBundle](http://symfony.com/doc/2.0/bundles/DoctrineFixturesBundle/index.html). If you don't have configured it
 with Symfony2 yet, follow the
 [setup instructions](http://symfony.com/doc/2.0/bundles/DoctrineFixturesBundle/index.html#setup-and-configuration).
 
@@ -16,7 +16,7 @@ Through [Composer](http://getcomposer.org), add to composer.json:
         "khepin/yaml-fixtures-bundle": "0.6.*"
     }
 
-Then register the bundle in `AppKernel.php` it's better to only register it in 
+Then register the bundle in `AppKernel.php` it's better to only register it in
 the dev environment as it shouldn't be needed elsewhere.
 
     public function registerBundles()
@@ -37,7 +37,8 @@ In your `config.yml` or `config_dev.yml` (recommended) add the following:
             - MyBundle
             - MyOtherBundle
 
-Under 'resources' is a list of the bundles that have fixtures that you wish to 
+
+Under 'resources' is a list of the bundles that have fixtures that you wish to
 load. The fixtures will be loaded in that order.
 
 # Define your fixture files
@@ -46,10 +47,16 @@ It is important to note that unlike in Symfony1, the order in which you load you
 fixtures DOES MATTER. There's 2 ways you can manipulate that order for now:
 
 - In the configuration: to decide which bundles have their fixtures loaded first
-- On the fixture file names: inside of each bundle, fixture files are loaded in 
+- On the fixture file names: inside of each bundle, fixture files are loaded in
 alphabetical order
 
-Fixture files all go under `MyBundle/DataFixtures/somefixtures.yml`.
+By default, fixture files all go under `MyBundle/DataFixtures/somefixtures.yml`.
+
+If you want to put your fixtures in a different directory, juste specify it in
+your config:
+
+    khepin_yaml_fixtures:
+        directory: Resources/fixtures
 
 You can only define fixtures for one class per file.
 
@@ -134,7 +141,7 @@ If you define fixtures in this way, then from the command line, calling:
     php app/console khepin:yamlfixtures:load prod
 
 All the fixture files for which you have set:
-    
+
     tags: [ ..., prod, ... ]
 
 Will be loaded. This way you can define fixtures that are loaded whenever you use
@@ -170,7 +177,7 @@ should be the first to go away which will cause a problems with foreign keys as 
 still referenced by `middle_level`.
 
 Save in reverse will create the objects in this order so the references are set
-properly and then save them in the opposite order so there is no exception when 
+properly and then save them in the opposite order so there is no exception when
 purging the database.
 
 ## Handling ORM One-To-Many or Many-To-Many Associations
@@ -197,8 +204,8 @@ for example, setParts() on the model you are defining in this file.
 ## Service calls
 
 Some entities require being managed by a special service before they can be persisted.
-This is the case with FOSUserBundle for example where the right password is set 
-by the `user_manager` and not directly in the user class. Therefore we need to 
+This is the case with FOSUserBundle for example where the right password is set
+by the `user_manager` and not directly in the user class. Therefore we need to
 ask this service to set our domain object in the correct state before it can be
 persisted. Service calls are declared this way:
 
@@ -222,7 +229,7 @@ code will happen:
 If you need to set ACL entries on your fixtures, it is possible. The ACLs are
 created after all fixtures have been saved so that there is no possible conflict.
 
-To set ACLs for the fixtures, you need to be using 
+To set ACLs for the fixtures, you need to be using
 [ProblematicAclManagerBundle](problematic/ProblematicAclManagerBundle).
 
 And to update your configuratin as follows:
@@ -243,7 +250,7 @@ Example:
         name: Mercedes
       mom_car:
         name: Mini Cooper
-        
+
     acl:
       dad_car:
         user_dad: MASK_OWNER
@@ -251,6 +258,6 @@ Example:
       mom_car:
         user_mom: MASK_OWNER
 
-Be careful that the ACLs in Symfony are not managed through Doctrine and 
-therefore will not be purged when you re-create your fixtures. However if 
+Be careful that the ACLs in Symfony are not managed through Doctrine and
+therefore will not be purged when you re-create your fixtures. However if
 any conflicts, loading the ACLs will overwrite all previous ACL entries.
