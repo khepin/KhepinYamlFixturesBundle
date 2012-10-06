@@ -7,7 +7,7 @@ php:
 services: mongodb
 
 before_script:
-  - ./bin/travis-mongo-installer.sh
+  - ./bin/travis-mongo-installer.sh > /dev/null
   - curl -s http://getcomposer.org/installer | php
   - php composer.phar install --dev
 
