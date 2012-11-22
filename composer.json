@@ -12,19 +12,19 @@
         }
     ],
     "require": {
-        "doctrine/data-fixtures": "dev-master",
-        "doctrine/doctrine-fixtures-bundle": "dev-master",
+        "doctrine/data-fixtures": "1.*@alpha",
+        "doctrine/doctrine-fixtures-bundle": "2.*",
         "doctrine/orm": "2.*",
-        "doctrine/doctrine-bundle": "dev-master"
+        "doctrine/doctrine-bundle": "*"
     },
     "require-dev": {
-        "doctrine/mongodb-odm": "dev-master",
-        "doctrine/mongodb": "dev-master",
-        "doctrine/mongodb-odm-bundle": "dev-master",
+        "doctrine/mongodb-odm": "*@beta",
+        "doctrine/mongodb": "*@beta",
+        "doctrine/mongodb-odm-bundle": "3.*@beta",
         "mockery/mockery": "dev-master"
     },
     "autoload": {
-        "psr-0": { 
+        "psr-0": {
             "Khepin\\YamlFixturesBundle": "",
             "Khepin": "tests"
         }
