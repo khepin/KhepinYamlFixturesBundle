@@ -8,25 +8,32 @@ use Doctrine\Common\Persistence\ObjectManager;
 abstract class AbstractFixture {
 
     protected $tags = array();
-    
+
     protected $file;
-    
+
     protected $loader;
 
     protected $manager;
-    
+
+    protected $fileFields = array();
+
     public function __construct(array $data, $loader) {
         $this->file = $data;
         if(isset($this->file['tags'])){
             $this->tags = $this->file['tags'];
         }
+
+        if(isset($this->file['file_fields'])){
+            $this->fileFields = $this->file['file_fields'];
+        }
+
         $this->loader = $loader;
     }
-    
+
     /**
      * Returns if the given tag is set for the current fixture
      * @param type $tag
-     * @return boolean 
+     * @return boolean
      */
     public function hasTag(Array $tags){
         // if no tags were specified, the fixture should always be loaded
@@ -85,7 +92,7 @@ abstract class AbstractFixture {
     /**
      * For fixtures that have relations to the same table, they need to appear
      * in the opposite order that they need to be saved.
-     * @return boolean 
+     * @return boolean
      */
     public function isReverseSaveOrder(){
         if(!isset($this->file['save_in_reverse']) || $this->file['save_in_reverse'] == false){

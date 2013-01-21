@@ -3,6 +3,9 @@
 namespace Khepin\YamlFixturesBundle\Fixture;
 
 use Doctrine\Common\Util\Inflector;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\File\File;
 
 class OrmYamlFixture extends AbstractFixture {
 
@@ -14,7 +17,7 @@ class OrmYamlFixture extends AbstractFixture {
         foreach ($data as $field => $value) {
             // Add the fields defined in the fistures file
             $method = Inflector::camelize('set_' . $field);
-            // 
+            //
             if (in_array($field, $mapping)) {
                 // Dates need to be converted to DateTime objects
                 $type = $metadata->fieldMappings[$field]['type'];
@@ -33,10 +36,24 @@ class OrmYamlFixture extends AbstractFixture {
                     $object->$method($this->loader->getReference($value));
                 }
             } else {
-                // It's a method call that will set a field named differently
-                // eg: FOSUserBundle ->setPlainPassword sets the password after
-                // Encrypting it
-                $object->$method($value);
+                // It's file field and path should be converted to File object
+                if (in_array($field, array_keys($this->fileFields))) {
+                    $path = $this->fileFields[$field] . DIRECTORY_SEPARATOR . $value;
+                    $file = new File($path);
+                    $originalName = $file->getFilename();
+                    $tempName = tempnam(sys_get_temp_dir(), '');
+
+                    $fs = new Filesystem();
+                    $fs->copy($path, $tempName, true);
+
+                    $object->$method(new UploadedFile($tempName, $originalName));
+                } else {
+                    // It's a method call that will set a field named differently
+                    // eg: FOSUserBundle ->setPlainPassword sets the password after
+                    // Encrypting it
+                    $object->$method($value);
+                }
+
             }
         }
         $this->runServiceCalls($object);
