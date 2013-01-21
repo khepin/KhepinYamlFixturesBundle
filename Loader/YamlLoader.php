@@ -164,4 +164,14 @@ class YamlLoader {
         return $this->kernel->getContainer()->get($service_id);
     }
 
+    /**
+     * Returns directory where fixtures are stored.
+     *
+     * @return string
+     */
+    public function getDirectory()
+    {
+        return $this->directory;
+    }
+
 }
