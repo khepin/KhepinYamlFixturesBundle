@@ -9,6 +9,8 @@ abstract class AbstractFixture {
 
     protected $tags = array();
 
+    protected $path;
+
     protected $file;
 
     protected $loader;
@@ -17,7 +19,9 @@ abstract class AbstractFixture {
 
     protected $fileFields = array();
 
-    public function __construct(array $data, $loader) {
+    public function __construct(array $data, $loader, $path)
+    {
+        $this->path = $path;
         $this->file = $data;
         if(isset($this->file['tags'])){
             $this->tags = $this->file['tags'];

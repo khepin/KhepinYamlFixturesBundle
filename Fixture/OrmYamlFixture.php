@@ -38,7 +38,7 @@ class OrmYamlFixture extends AbstractFixture {
             } else {
                 // It's file field and path should be converted to File object
                 if (in_array($field, $this->fileFields)) {
-                    $path = $this->loader->getDirectory() . DIRECTORY_SEPARATOR . $value;
+                    $path = dirname($this->path) . DIRECTORY_SEPARATOR . $value;
                     $file = new File($path);
                     $originalName = $file->getFilename();
                     $tempName = tempnam(sys_get_temp_dir(), '');

@@ -97,7 +97,7 @@ class YamlLoader {
             // if nothing is specified, we use doctrine orm for persistence
             $persistence = isset($fixture_data['persistence']) ? $fixture_data['persistence'] : 'orm';
             $fixture = $this->getFixtureClass($persistence);
-            $fixture = new $fixture($fixture_data, $this);
+            $fixture = new $fixture($fixture_data, $this, $file);
             $fixture->load($this->getManager($persistence), func_get_args());
         }
 
@@ -163,15 +163,4 @@ class YamlLoader {
     public function getService($service_id){
         return $this->kernel->getContainer()->get($service_id);
     }
-
-    /**
-     * Returns directory where fixtures are stored.
-     *
-     * @return string
-     */
-    public function getDirectory()
-    {
-        return $this->directory;
-    }
-
 }
