@@ -8,11 +8,12 @@ use Doctrine\ORM\Tools\SchemaTool;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 use Doctrine\ORM\Mapping\DefaultQuoteStrategy;
 
-class BaseTestCaseOrm extends \PHPUnit_Framework_TestCase {
-    
+class BaseTestCaseOrm extends \PHPUnit_Framework_TestCase
+{
     protected $doctrine;
 
-    private function getMockAnnotatedConfig() {
+    private function getMockAnnotatedConfig()
+    {
         $config = $this->getMock('Doctrine\ORM\Configuration');
         $config
                 ->expects($this->once())
@@ -68,9 +69,10 @@ class BaseTestCaseOrm extends \PHPUnit_Framework_TestCase {
      *
      * @return \Doctrine\ORM\Mapping\Driver\Driver
      */
-    protected function getMetadataDriverImplementation() {
+    protected function getMetadataDriverImplementation()
+    {
         return new AnnotationDriver(
-                $_ENV['annotation_reader'], 
+                $_ENV['annotation_reader'],
                 array(__DIR__.'/../Fixture/Entity')
         );
     }
@@ -80,10 +82,11 @@ class BaseTestCaseOrm extends \PHPUnit_Framework_TestCase {
      * annotation mapping driver and pdo_sqlite
      * database in memory
      *
-     * @param EventManager $evm
+     * @param  EventManager  $evm
      * @return EntityManager
      */
-    protected function getDoctrine() {
+    protected function getDoctrine()
+    {
         $conn = array(
             'driver' => 'pdo_sqlite',
             'memory' => true,
@@ -106,6 +109,7 @@ class BaseTestCaseOrm extends \PHPUnit_Framework_TestCase {
         $schemaTool = new SchemaTool($em);
         $schemaTool->dropSchema(array());
         $schemaTool->createSchema($schema);
+
         return $this->doctrine = m::mock(array(
             'getEntityManager'  => $em,
             'getManager'        => $em,

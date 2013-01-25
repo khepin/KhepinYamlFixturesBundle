@@ -20,6 +20,7 @@ spl_autoload_register(function($class) {
             return false;
         }
         require_once $path;
+
         return true;
     }
 });

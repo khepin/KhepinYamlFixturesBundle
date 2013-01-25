@@ -4,9 +4,10 @@ namespace Khepin\YamlFixturesBundle\Fixture;
 
 use Doctrine\Common\Util\Inflector;
 
-class OrmYamlFixture extends AbstractFixture {
-
-    public function createObject($class, $data, $metadata, $options = array()){
+class OrmYamlFixture extends AbstractFixture
+{
+    public function createObject($class, $data, $metadata, $options = array())
+    {
         $mapping = array_keys($metadata->fieldMappings);
         $associations = array_keys($metadata->associationMappings);
 
@@ -14,7 +15,7 @@ class OrmYamlFixture extends AbstractFixture {
         foreach ($data as $field => $value) {
             // Add the fields defined in the fistures file
             $method = Inflector::camelize('set_' . $field);
-            // 
+            //
             if (in_array($field, $mapping)) {
                 // Dates need to be converted to DateTime objects
                 $type = $metadata->fieldMappings[$field]['type'];
@@ -22,7 +23,7 @@ class OrmYamlFixture extends AbstractFixture {
                     $value = new \DateTime($value);
                 }
                 $object->$method($value);
-            } else if (in_array($field, $associations)) { // This field is an association
+            } elseif (in_array($field, $associations)) { // This field is an association
                 if (is_array($value)) { // The field is an array of associations
                     $referenceArray = array();
                     foreach ($value as $referenceObject) {

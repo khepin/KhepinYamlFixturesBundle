@@ -2,46 +2,49 @@
 
 namespace Khepin\YamlFixturesBundle\Fixture;
 
-use Symfony\Component\Yaml\Yaml;
 use Doctrine\Common\Persistence\ObjectManager;
 
-abstract class AbstractFixture {
-
+abstract class AbstractFixture
+{
     protected $tags = array();
-    
+
     protected $file;
-    
+
     protected $loader;
 
     protected $manager;
-    
-    public function __construct(array $data, $loader) {
+
+    public function __construct(array $data, $loader)
+    {
         $this->file = $data;
-        if(isset($this->file['tags'])){
+        if (isset($this->file['tags'])) {
             $this->tags = $this->file['tags'];
         }
         $this->loader = $loader;
     }
-    
+
     /**
      * Returns if the given tag is set for the current fixture
-     * @param type $tag
-     * @return boolean 
+     * @param  type    $tag
+     * @return boolean
      */
-    public function hasTag(Array $tags){
+    public function hasTag(Array $tags)
+    {
         // if no tags were specified, the fixture should always be loaded
-        if(count($this->tags) == 0 || count(array_intersect($this->tags, $tags)) > 0 ){
+        if (count($this->tags) == 0 || count(array_intersect($this->tags, $tags)) > 0 ) {
             return true;
         }
+
         return false;
     }
 
     /**
      * @param the object on which to run the service calls
      */
-    public function runServiceCalls($object){
-        if(isset($this->file['service_calls'])){
-            foreach($this->file['service_calls'] as $call){
+    public function runServiceCalls($object)
+    {
+        if (isset($this->file['service_calls'])) {
+            foreach ($this->file['service_calls'] as $call) {
                 $s = $this->loader->getService($call['service']);
                 $m = $call['method'];
                 $s->$m($object);
@@ -49,8 +52,9 @@ abstract class AbstractFixture {
         }
     }
 
-    public function load(ObjectManager $manager, $tags = null) {
-        if(!$this->hasTag($tags)){
+    public function load(ObjectManager $manager, $tags = null)
+    {
+        if (!$this->hasTag($tags)) {
             return;
         }
         $this->manager = $manager;
@@ -61,14 +65,14 @@ abstract class AbstractFixture {
         foreach ($this->file['fixtures'] as $reference => $fixture_data) {
             $object = $this->createObject($class, $fixture_data, $metadata);
             $this->loader->setReference($reference, $object);
-            if(!$this->isReverseSaveOrder()){
+            if (!$this->isReverseSaveOrder()) {
                 $manager->persist($object);
             }
         }
 
-        if($this->isReverseSaveOrder()){
+        if ($this->isReverseSaveOrder()) {
             $refs = array_keys($this->file['fixtures']);
-            for($i = (count($refs) - 1); $i>=0; $i--){
+            for ($i = (count($refs) - 1); $i>=0; $i--) {
                 $manager->persist($this->loader->getReference($refs[$i]));
             }
         }
@@ -76,7 +80,8 @@ abstract class AbstractFixture {
         $manager->flush();
     }
 
-    public function getMetadataForClass($class){
+    public function getMetadataForClass($class)
+    {
         $cmf = $this->manager->getMetadataFactory();
 
         return $cmf->getMetaDataFor($class);
@@ -85,12 +90,14 @@ abstract class AbstractFixture {
     /**
      * For fixtures that have relations to the same table, they need to appear
      * in the opposite order that they need to be saved.
-     * @return boolean 
+     * @return boolean
      */
-    public function isReverseSaveOrder(){
-        if(!isset($this->file['save_in_reverse']) || $this->file['save_in_reverse'] == false){
+    public function isReverseSaveOrder()
+    {
+        if (!isset($this->file['save_in_reverse']) || $this->file['save_in_reverse'] == false) {
             return false;
         }
+
         return true;
     }
 
@@ -103,5 +110,5 @@ abstract class AbstractFixture {
      * @param $options options specific to each implementation
      * @return Object
      */
-    public abstract function createObject($class, $data, $metadata, $options = array());
+    abstract public function createObject($class, $data, $metadata, $options = array());
 }

@@ -17,7 +17,7 @@ $deps = array(
 
     array('Symfony/Component/ClassLoader', 'git://github.com/symfony/ClassLoader.git', 'v2.0.9'),
     array('Symfony/Component/Yaml', 'git://github.com/symfony/Yaml.git', 'v2.0.9'),
-    
+
     array('Mockery', 'git://github.com/padraic/mockery'),
 );
 

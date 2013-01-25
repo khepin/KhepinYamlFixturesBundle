@@ -7,8 +7,8 @@ use Doctrine\ODM\MongoDB\Mapping\Annotations as ODM;
 /**
  * @ODM\Document
  */
-class Driver {
-
+class Driver
+{
     /**
      * @ODM\Id
      */
@@ -30,31 +30,38 @@ class Driver {
      */
     private $name;
 
-    public function getId() {
+    public function getId()
+    {
         return $this->id;
     }
 
-    public function addCars(Car $car){
+    public function addCars(Car $car)
+    {
         $this->cars[] = $car;
     }
 
-    public function getCars(){
+    public function getCars()
+    {
         return $this->cars;
     }
 
-    public function getName(){
+    public function getName()
+    {
         return $this->name;
     }
 
-    public function setName($name){
+    public function setName($name)
+    {
         $this->name = $name;
     }
 
-    public function setPreferredCar($car){
+    public function setPreferredCar($car)
+    {
         $this->preferred_car = $car;
     }
 
-    public function getPreferredCar(){
+    public function getPreferredCar()
+    {
         return $this->preferred_car;
     }
 }

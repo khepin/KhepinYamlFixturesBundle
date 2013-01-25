@@ -1,5 +1,5 @@
 <?php
 
-class AppKernel {
-    
+class AppKernel
+{
 }

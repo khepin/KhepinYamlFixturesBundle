@@ -15,7 +15,7 @@ class YamlFixturesPass implements CompilerPassInterface
         // If there was a call registered to set the acl manager, we can now
         // set it with the proper reference
         $definition = $container->getDefinition('khepin.yaml_loader');
-        if($definition->hasMethodCall('setAclManager')){
+        if ($definition->hasMethodCall('setAclManager')) {
             $definition->removeMethodCall('setAclManager');
             $definition->addMethodCall('setAclManager', array(new Reference('problematic.acl_manager')));
         }

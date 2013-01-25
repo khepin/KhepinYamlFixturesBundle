@@ -6,11 +6,12 @@ use Doctrine\ORM\EntityManager;
 use \Mockery as m;
 use Doctrine\ODM\MongoDB\Mapping\Driver\AnnotationDriver;
 
-class BaseTestCaseMongo extends \PHPUnit_Framework_TestCase {
-    
+class BaseTestCaseMongo extends \PHPUnit_Framework_TestCase
+{
     protected $doctrine;
 
-    private function getMockAnnotatedConfig() {
+    private function getMockAnnotatedConfig()
+    {
         $mappingDriver = $this->getMetadataDriverImplementation();
 
         $config = m::mock('Doctrine\ODM\MongoDB\Configuration', array(
@@ -40,9 +41,10 @@ class BaseTestCaseMongo extends \PHPUnit_Framework_TestCase {
      *
      * @return \Doctrine\ORM\Mapping\Driver\Driver
      */
-    protected function getMetadataDriverImplementation() {
+    protected function getMetadataDriverImplementation()
+    {
         return new AnnotationDriver(
-                $_ENV['annotation_reader'], 
+                $_ENV['annotation_reader'],
                 __DIR__.'/../Fixture/Document'
         );
     }
@@ -52,10 +54,11 @@ class BaseTestCaseMongo extends \PHPUnit_Framework_TestCase {
      * annotation mapping driver and pdo_sqlite
      * database in memory
      *
-     * @param EventManager $evm
+     * @param  EventManager  $evm
      * @return EntityManager
      */
-    protected function getDoctrine() {
+    protected function getDoctrine()
+    {
         $config = $this->getMockAnnotatedConfig();
         $dm = \Doctrine\ODM\MongoDB\DocumentManager::create(null, $config);
 

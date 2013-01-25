@@ -4,8 +4,8 @@ namespace Khepin\YamlFixturesBundle\Fixture;
 
 use Doctrine\Common\Util\Inflector;
 
-class MongoYamlFixture extends AbstractFixture {
-
+class MongoYamlFixture extends AbstractFixture
+{
     /**
      * Creates and returns one object based on the given data and metadata
      *
@@ -43,7 +43,7 @@ class MongoYamlFixture extends AbstractFixture {
                         }
                     //ReferenceMany
                     } else {
-                        foreach($value as $reference_object) {
+                        foreach ($value as $reference_object) {
                             $object->$method($this->loader->getReference($reference_object));
                         }
                     }
@@ -72,7 +72,7 @@ class MongoYamlFixture extends AbstractFixture {
         }
 
         // Save a reference to the current object
-        if(!$embedded) {
+        if (!$embedded) {
             $this->runServiceCalls($object);
         }
 

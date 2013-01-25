@@ -30,7 +30,8 @@ class Configuration implements ConfigurationInterface
         return $treeBuilder;
     }
 
-    public function addBundlesSection($rootNode){
+    public function addBundlesSection($rootNode)
+    {
         $rootNode
             ->children()
                 ->scalarNode('acl_manager')

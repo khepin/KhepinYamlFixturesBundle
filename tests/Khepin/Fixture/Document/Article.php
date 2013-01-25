@@ -8,8 +8,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 /**
  * @ODM\Document
  */
-class Article {
-
+class Article
+{
     /**
      * @ODM\Id
      */
@@ -36,35 +36,43 @@ class Article {
      */
     private $content;
 
-    public function __construct(){
+    public function __construct()
+    {
         $this->comments = new ArrayCollection;
     }
 
-    public function getId(){
+    public function getId()
+    {
         return $this->id;
     }
 
-    public function getTitle(){
+    public function getTitle()
+    {
         return $this->title;
     }
 
-    public function setTitle($title){
+    public function setTitle($title)
+    {
         $this->title = $title;
     }
 
-    public function getContent(){
+    public function getContent()
+    {
         return $this->content;
     }
 
-    public function setContent($content){
+    public function setContent($content)
+    {
         $this->content = $content;
     }
 
-    public function getAuthor(){
+    public function getAuthor()
+    {
         return $this->author;
     }
 
-    public function setAuthor(Author $author){
+    public function setAuthor(Author $author)
+    {
         $this->author = $author;
     }
 

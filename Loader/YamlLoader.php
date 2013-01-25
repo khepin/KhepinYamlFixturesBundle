@@ -2,13 +2,12 @@
 
 namespace Khepin\YamlFixturesBundle\Loader;
 
-use Khepin\YamlFixturesBundle\Fixture\YamlFixture;
 use Khepin\YamlFixturesBundle\Fixture\YamlAclFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Yaml\Yaml;
 
-class YamlLoader {
-
+class YamlLoader
+{
     private $bundles;
 
     /**
@@ -44,7 +43,8 @@ class YamlLoader {
      */
     private $directory;
 
-    public function __construct(\AppKernel $kernel, $bundles, $directory) {
+    public function __construct(\AppKernel $kernel, $bundles, $directory)
+    {
         $this->bundles = $bundles;
         $this->kernel = $kernel;
         $this->directory = $directory;
@@ -54,16 +54,18 @@ class YamlLoader {
      *
      * @param type $manager
      */
-    public function setAclManager($manager = null) {
+    public function setAclManager($manager = null)
+    {
         $this->acl_manager = $manager;
     }
 
     /**
      * Returns a previously saved reference
-     * @param type $reference_name
+     * @param  type $reference_name
      * @return type
      */
-    public function getReference($reference_name) {
+    public function getReference($reference_name)
+    {
         return !is_null($reference_name) ? $this->references[$reference_name] : null;
     }
 
@@ -72,14 +74,16 @@ class YamlLoader {
      * @param type $name
      * @param type $object
      */
-    public function setReference($name, $object) {
+    public function setReference($name, $object)
+    {
         $this->references[$name] = $object;
     }
 
     /**
      * Gets all fixtures files
      */
-    protected function loadFixtureFiles() {
+    protected function loadFixtureFiles()
+    {
         foreach ($this->bundles as $bundle) {
             $path = $this->kernel->locateResource('@' . $bundle);
             $files = glob($path . $this->directory . '/*.yml');
@@ -90,7 +94,8 @@ class YamlLoader {
     /**
      * Loads the fixtures file by file and saves them to the database
      */
-    public function loadFixtures() {
+    public function loadFixtures()
+    {
         $this->loadFixtureFiles();
         foreach ($this->fixture_files as $file) {
             $fixture_data = Yaml::parse($file);
@@ -112,7 +117,8 @@ class YamlLoader {
     /**
      * Remove all fixtures from the database
      */
-    public function purgeDatabase($persistence) {
+    public function purgeDatabase($persistence)
+    {
         $purgetools = array(
             'orm'       => array(
                 'purger'    => 'Doctrine\Common\DataFixtures\Purger\ORMPurger',
@@ -137,11 +143,13 @@ class YamlLoader {
      * Returns a doctrine object manager for the given persistence layer
      * @return ObjectManager
      */
-    public function getManager($persistence){
+    public function getManager($persistence)
+    {
         $managers = array(
             'orm'       => 'doctrine',
             'mongodb'   => 'doctrine_mongodb',
         );
+
         return $this->kernel->getContainer()
             ->get($managers[$persistence])->getManager();
     }
@@ -149,18 +157,21 @@ class YamlLoader {
     /**
      * @return string classname
      */
-    public function getFixtureClass($persistence){
+    public function getFixtureClass($persistence)
+    {
         $classes = array(
             'orm'       => 'Khepin\YamlFixturesBundle\Fixture\OrmYamlFixture',
             'mongodb'   => 'Khepin\YamlFixturesBundle\Fixture\MongoYamlFixture'
         );
+
         return $classes[$persistence];
     }
 
     /**
      * @return the service with given id
      */
-    public function getService($service_id){
+    public function getService($service_id)
+    {
         return $this->kernel->getContainer()->get($service_id);
     }
 

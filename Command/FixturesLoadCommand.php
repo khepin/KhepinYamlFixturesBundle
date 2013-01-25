@@ -7,7 +7,8 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class FixturesLoadCommand extends ContainerAwareCommand {
+class FixturesLoadCommand extends ContainerAwareCommand
+{
     protected function configure()
     {
         $this
@@ -28,7 +29,7 @@ class FixturesLoadCommand extends ContainerAwareCommand {
         if ($input->getOption('purge-mongodb')) {
             $this->getContainer()->get('khepin.yaml_loader')->purgeDatabase('mongodb');
         }
-        
+
         $this->getContainer()->get('khepin.yaml_loader')->loadFixtures($context);
 
         $output->writeln('done!');

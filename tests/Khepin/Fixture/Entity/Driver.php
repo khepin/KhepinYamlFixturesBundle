@@ -7,8 +7,8 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity
  */
-class Driver {
-
+class Driver
+{
     /**
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -33,23 +33,28 @@ class Driver {
      */
     private $name;
 
-    public function getId() {
+    public function getId()
+    {
         return $this->id;
     }
 
-    public function setCar(Car $car){
+    public function setCar(Car $car)
+    {
         $this->car = $car;
     }
 
-    public function getCar(){
+    public function getCar()
+    {
         return $this->car;
     }
 
-    public function getName(){
+    public function getName()
+    {
         return $this->name;
     }
 
-    public function setName($name){
+    public function setName($name)
+    {
         $this->name = $name;
     }
 

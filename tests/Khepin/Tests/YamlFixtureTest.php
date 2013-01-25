@@ -6,11 +6,12 @@ use \Mockery as m;
 use Khepin\YamlFixturesBundle\Loader\YamlLoader;
 use Khepin\Utils\BaseTestCaseOrm;
 
-class YamlFixtureTest extends BaseTestCaseOrm {
-
+class YamlFixtureTest extends BaseTestCaseOrm
+{
     protected $kernel = null;
 
-    public function setUp() {
+    public function setUp()
+    {
         $this->getDoctrine();
         $service = m::mock()->shouldReceive('lowerCaseName')->withAnyArgs()->andReturnUsing(
                 function($car){
@@ -29,7 +30,8 @@ class YamlFixtureTest extends BaseTestCaseOrm {
         );
     }
 
-    public function testSimpleLoading() {
+    public function testSimpleLoading()
+    {
         $loader = new YamlLoader($this->kernel, array('SomeBundle'), 'DataFixtures');
         $loader->loadFixtures();
 
@@ -46,7 +48,8 @@ class YamlFixtureTest extends BaseTestCaseOrm {
         $this->assertEquals('BMW', $car->getName());
     }
 
-    public function testContext() {
+    public function testContext()
+    {
         $loader = new YamlLoader($this->kernel, array('SomeBundle'), 'DataFixtures');
         $loader->loadFixtures('french_cars');
 
@@ -61,7 +64,8 @@ class YamlFixtureTest extends BaseTestCaseOrm {
         $this->assertEquals('BMW', $car->getName());
     }
 
-    public function testWithAssociation(){
+    public function testWithAssociation()
+    {
         $loader = new YamlLoader($this->kernel, array('SomeBundle'), 'DataFixtures');
         $loader->loadFixtures('with_drivers');
 
@@ -74,7 +78,8 @@ class YamlFixtureTest extends BaseTestCaseOrm {
         $this->assertEquals(get_class($driver->getCar()), 'Khepin\Fixture\Entity\Car');
     }
 
-    public function testPurge(){
+    public function testPurge()
+    {
         $loader = new YamlLoader($this->kernel, array('SomeBundle'), 'DataFixtures');
         $loader->loadFixtures('with_drivers');
         $loader->purgeDatabase('orm');
@@ -85,7 +90,8 @@ class YamlFixtureTest extends BaseTestCaseOrm {
         $this->assertEmpty($drivers);
     }
 
-    public function testNullValuesInAssociations() {
+    public function testNullValuesInAssociations()
+    {
         $loader = new YamlLoader($this->kernel, array('SomeBundle'), 'DataFixtures');
         $loader->loadFixtures('with_drivers');
 
@@ -108,7 +114,8 @@ class YamlFixtureTest extends BaseTestCaseOrm {
         $this->assertEquals($driver->getSecondCar()->getName(), 'Mercedes');
     }
 
-    public function testServiceCalls(){
+    public function testServiceCalls()
+    {
         $loader = new YamlLoader($this->kernel, array('SomeBundle'), 'DataFixtures');
         $loader->loadFixtures('service');
 
