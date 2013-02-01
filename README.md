@@ -3,6 +3,7 @@ Doctrine2. It currently works with either Doctrine ORM or Doctrine MongoDB ODM.
 Other backend are not implemented yet but can be implemented very easily.
 
 **Travic CI status:** [![Build Status](https://secure.travis-ci.org/khepin/KhepinYamlFixturesBundle.png?branch=master)](http://travis-ci.org/khepin/KhepinYamlFixturesBundle)
+
 **Depandencies status:** [![Dependencies](http://dependency.me/repository/image/khepin/KhepinYamlFixturesBundle/BRANCHE_NAME)](http://dependency.me/repository/branche/khepin/KhepinYamlFixturesBundle/BRANCHE_NAME)
 
 # Installation
