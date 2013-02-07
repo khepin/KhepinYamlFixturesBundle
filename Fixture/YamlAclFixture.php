@@ -30,4 +30,9 @@ class YamlAclFixture extends AbstractFixture
     {
         return constant('Symfony\Component\Security\Acl\Permission\MaskBuilder::'.$permission);
     }
+
+    public function createObject($class, $data, $metadata, $options = array())
+    {
+        // No implementation for ACL fixtures
+    }
 }
