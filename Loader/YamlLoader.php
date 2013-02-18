@@ -85,8 +85,12 @@ class YamlLoader
     protected function loadFixtureFiles()
     {
         foreach ($this->bundles as $bundle) {
+            $file = '*';
+            if (strpos($bundle, '/')) {
+                list($bundle, $file) = explode('/', $bundle);
+            }
             $path = $this->kernel->locateResource('@' . $bundle);
-            $files = glob($path . $this->directory . '/*.yml');
+            $files = glob($path . $this->directory . '/'.$file.'.yml');
             $this->fixture_files = array_merge($this->fixture_files, $files);
         }
     }
@@ -102,7 +106,7 @@ class YamlLoader
             // if nothing is specified, we use doctrine orm for persistence
             $persistence = isset($fixture_data['persistence']) ? $fixture_data['persistence'] : 'orm';
             $fixture = $this->getFixtureClass($persistence);
-            $fixture = new $fixture($fixture_data, $this);
+            $fixture = new $fixture($fixture_data, $this, $file);
             $fixture->load($this->getManager($persistence), func_get_args());
         }
 
@@ -174,5 +178,4 @@ class YamlLoader
     {
         return $this->kernel->getContainer()->get($service_id);
     }
-
 }

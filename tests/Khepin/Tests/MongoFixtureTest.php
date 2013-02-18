@@ -47,6 +47,18 @@ class MongoFixtureTest extends BaseTestCaseMongo
         $this->assertEquals(get_class($date), get_class($car->getDatePurchased()));
     }
 
+    public function testLoadSingleFile()
+    {
+        $loader = new YamlLoader($this->kernel, array('SomeBundle/cars'), 'DataFixtures');
+        $loader->loadFixtures();
+
+        $dm = $this->doctrine->getManager();
+        $cars = $dm->getRepository('Khepin\Fixture\Document\Car')->findAll();
+        $this->assertEquals(2, count($cars));
+        $drivers = $dm->getRepository('Khepin\Fixture\Document\Driver')->findAll();
+        $this->assertEquals(0, count($drivers));
+    }
+
     public function testPurge()
     {
         $loader = new YamlLoader($this->kernel, array('SomeBundle'), 'DataFixtures');

@@ -48,6 +48,18 @@ class YamlFixtureTest extends BaseTestCaseOrm
         $this->assertEquals('BMW', $car->getName());
     }
 
+    public function testLoadSingleFile()
+    {
+        $loader = new YamlLoader($this->kernel, array('SomeBundle/cars'), 'DataFixtures');
+        $loader->loadFixtures();
+
+        $em = $this->doctrine->getManager();
+        $cars = $em->getRepository('Khepin\Fixture\Entity\Car')->findAll();
+        $this->assertEquals(2, count($cars));
+        $drivers = $em->getRepository('Khepin\Fixture\Entity\Driver')->findAll();
+        $this->assertEquals(0, count($drivers));
+    }
+
     public function testContext()
     {
         $loader = new YamlLoader($this->kernel, array('SomeBundle'), 'DataFixtures');
