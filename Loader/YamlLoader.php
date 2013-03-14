@@ -91,7 +91,7 @@ class YamlLoader
             }
             $path = $this->kernel->locateResource('@' . $bundle);
             $files = glob($path . $this->directory . '/'.$file.'.yml');
-            $this->fixture_files = array_merge($this->fixture_files, $files);
+            $this->fixture_files = array_unique(array_merge($this->fixture_files, $files));
         }
     }
 
