@@ -85,7 +85,7 @@ You can use references to previously created fixtures:
     fixtures:
         audi_a3:
             owner: michael
-            since: "2010-12-12" #dates NEED to be set inside quotes
+            since: "2010-12-12"
 
 For MongoDB's reference many, just put a list of references:
 
@@ -101,6 +101,19 @@ For MongoDB's reference many, just put a list of references:
 You can also define as many files as you want for the same entity. This will be
 useful when used together with context tags (see below).
 
+
+##Work with dates and times:
+
+Dates need to be set inside quotes.
+Dates are passed to DateTime, so any [string that will work will DateTime](http://www.php.net/manual/en/datetime.formats.php) will work here.
+That includes the relative formats like "-1 day", "next month", "1 week ago".
+
+    model: Name\Space\MyBundle\Entity\Statistics
+    fixtures:
+        stat-1:
+            product: example.org
+            date: "2010-12-12" #dates NEED to be set inside quotes
+            
 ## Mongo embedded documents
 
 It's possible to use embedded documents in mongo (only embed_one is implemented
