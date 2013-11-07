@@ -4,7 +4,7 @@ tags: [ with_drivers ]
 fixtures:
   dad:
     name: Dad
-    cars: 
+    cars:
       - peugeot
       - renault
       - citroen

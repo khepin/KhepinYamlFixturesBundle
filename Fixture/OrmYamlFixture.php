@@ -2,6 +2,7 @@
 
 namespace Khepin\YamlFixturesBundle\Fixture;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Util\Inflector;
 
 class OrmYamlFixture extends AbstractFixture
@@ -15,7 +16,7 @@ class OrmYamlFixture extends AbstractFixture
         foreach ($data as $field => $value) {
             // Add the fields defined in the fistures file
             $method = Inflector::camelize('set_' . $field);
-            //
+
             if (in_array($field, $mapping)) {
                 // Dates need to be converted to DateTime objects
                 $type = $metadata->fieldMappings[$field]['type'];
@@ -29,15 +30,20 @@ class OrmYamlFixture extends AbstractFixture
                     foreach ($value as $referenceObject) {
                         $referenceArray[] = $this->loader->getReference($referenceObject);
                     }
-                    $object->$method($referenceArray);
+
+                    $object->$method(new ArrayCollection($referenceArray));
                 } else {
                     $object->$method($this->loader->getReference($value));
                 }
             } else {
-                // It's a method call that will set a field named differently
-                // eg: FOSUserBundle ->setPlainPassword sets the password after
-                // Encrypting it
-                $object->$method($value);
+                if (!is_null($this->loader->getReference($value))) {
+                    $object->$method($this->loader->getReference($value));
+                } else {
+                    // It's a method call that will set a field named differently
+                    // eg: FOSUserBundle ->setPlainPassword sets the password after
+                    // Encrypting it
+                    $object->$method($value);
+                }
             }
         }
         $this->runServiceCalls($object);
