@@ -7,6 +7,7 @@ use \Mockery as m;
 use Doctrine\ORM\Tools\SchemaTool;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 use Doctrine\ORM\Mapping\DefaultQuoteStrategy;
+use Doctrine\ORM\Repository\DefaultRepositoryFactory;
 
 class BaseTestCaseOrm extends \PHPUnit_Framework_TestCase
 {
@@ -59,6 +60,14 @@ class BaseTestCaseOrm extends \PHPUnit_Framework_TestCase
             ->expects($this->any())
             ->method('getQuoteStrategy')
             ->will($this->returnValue($quoteStrategy))
+        ;
+
+        $repositoryFactory = new DefaultRepositoryFactory();
+
+        $config
+            ->expects($this->any())
+            ->method('getRepositoryFactory')
+            ->will($this->returnValue($repositoryFactory))
         ;
 
         return $config;
