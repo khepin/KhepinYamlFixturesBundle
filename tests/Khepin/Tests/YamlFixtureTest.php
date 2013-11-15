@@ -114,6 +114,29 @@ class YamlFixtureTest extends BaseTestCaseOrm
         $this->assertEmpty($drivers);
     }
 
+    public function testPurgeWithTruncate()
+    {
+        $loader = new YamlLoader($this->kernel, array('SomeBundle'), 'DataFixtures');
+        $loader->loadFixtures('with_drivers');
+
+        $cars = $this->doctrine->getEntityManager()->getRepository('Khepin\Fixture\Entity\Car')->findAll();
+        $firstCar = $cars[0];
+        $firstCarIdBefore = $firstCar->getId();
+
+        $loader->purgeDatabase('orm', true);
+
+        $cars = $this->doctrine->getEntityManager()->getRepository('Khepin\Fixture\Entity\Car')->findAll();
+        $this->assertEmpty($cars);
+
+        $loader->loadFixtures('with_drivers');
+
+        $cars = $this->doctrine->getEntityManager()->getRepository('Khepin\Fixture\Entity\Car')->findAll();
+        $firstCar = $cars[0];
+        $firstCarIdAfter = $firstCar->getId();
+
+        $this->assertEquals($firstCarIdBefore, $firstCarIdAfter);
+    }
+
     public function testNullValuesInAssociations()
     {
         $loader = new YamlLoader($this->kernel, array('SomeBundle'), 'DataFixtures');
