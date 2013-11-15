@@ -138,7 +138,7 @@ class YamlLoader
         $executor_class = $purgetools[$persistence]['executor'];
         // Instanciate purger and executor
         $purger = new $purge_class($this->getManager($persistence));
-        $executor = new $purge_class($this->getManager($persistence), $purger);
+        $executor = new $executor_class($this->getManager($persistence), $purger);
         // purge
         $executor->purge();
     }
