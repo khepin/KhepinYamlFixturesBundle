@@ -4,6 +4,7 @@ namespace Khepin\YamlFixturesBundle\Loader;
 
 use Khepin\YamlFixturesBundle\Fixture\YamlAclFixture;
 use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 use Symfony\Component\Yaml\Yaml;
 
 class YamlLoader
@@ -121,7 +122,7 @@ class YamlLoader
     /**
      * Remove all fixtures from the database
      */
-    public function purgeDatabase($persistence)
+    public function purgeDatabase($persistence, $withTruncate = false)
     {
         $purgetools = array(
             'orm'       => array(
@@ -138,7 +139,13 @@ class YamlLoader
         $executor_class = $purgetools[$persistence]['executor'];
         // Instanciate purger and executor
         $purger = new $purge_class($this->getManager($persistence));
-        $executor = new $purge_class($this->getManager($persistence), $purger);
+
+        // Check if the purger supports setting the purge mode
+        if ($withTruncate && $purger instanceof ORMPurger) {
+            $purger->setPurgeMode(ORMPurger::PURGE_MODE_TRUNCATE);
+        }
+
+        $executor = new $executor_class($this->getManager($persistence), $purger);
         // purge
         $executor->purge();
     }

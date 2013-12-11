@@ -17,6 +17,7 @@ class FixturesLoadCommand extends ContainerAwareCommand
             ->addArgument('context', InputArgument::OPTIONAL, 'Specify a context from which to load additional fixtures')
             ->addOption('purge-orm', null, InputOption::VALUE_NONE, 'If set, will purge the database before importing new fixtures')
             ->addOption('purge-mongodb', null, InputOption::VALUE_NONE, 'If set, will purge the database before importing new fixtures')
+            ->addOption('purge-with-truncate', null, InputOption::VALUE_NONE, 'Purge data by using a database-level TRUNCATE statement (only for ORM)')
         ;
     }
 
@@ -24,7 +25,7 @@ class FixturesLoadCommand extends ContainerAwareCommand
     {
         $context = $input->getArgument('context');
         if ($input->getOption('purge-orm')) {
-            $this->getContainer()->get('khepin.yaml_loader')->purgeDatabase('orm');
+            $this->getContainer()->get('khepin.yaml_loader')->purgeDatabase('orm', $input->getOption('purge-with-truncate'));
         }
         if ($input->getOption('purge-mongodb')) {
             $this->getContainer()->get('khepin.yaml_loader')->purgeDatabase('mongodb');
