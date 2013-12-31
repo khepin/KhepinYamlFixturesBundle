@@ -6,6 +6,7 @@ use Khepin\YamlFixturesBundle\Fixture\YamlAclFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 use Symfony\Component\Yaml\Yaml;
+use Symfony\Component\HttpKernel\Kernel;
 
 class YamlLoader
 {
@@ -44,7 +45,7 @@ class YamlLoader
      */
     private $directory;
 
-    public function __construct(\AppKernel $kernel, $bundles, $directory)
+    public function __construct(Kernel $kernel, $bundles, $directory)
     {
         $this->bundles = $bundles;
         $this->kernel = $kernel;
