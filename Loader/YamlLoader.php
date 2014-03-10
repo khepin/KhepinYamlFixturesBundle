@@ -107,9 +107,14 @@ class YamlLoader
 
     /**
      * Gets all fixtures files
+     * @param string $single_bundle Single bundle fixture file if it was specified.
      */
-    protected function loadFixtureFiles()
+    protected function loadFixtureFiles($single_bundle = null)
     {
+        if ($single_bundle) {
+          $this->bundles = array($single_bundle);
+        }
+
         foreach ($this->bundles as $bundle) {
             $file = '*';
             if (strpos($bundle, '/')) {
@@ -129,7 +134,7 @@ class YamlLoader
         $tags = $this->extractTags(func_get_args());
         $single_bundle = $this->extractSingleBundle(func_get_args());
 
-        $this->loadFixtureFiles();
+        $this->loadFixtureFiles($single_bundle);
         foreach ($this->fixture_files as $file) {
             $fixture_data = Yaml::parse($file);
             // if nothing is specified, we use doctrine orm for persistence
