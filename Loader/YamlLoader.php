@@ -93,6 +93,19 @@ class YamlLoader
     }
 
     /**
+     * If it was specified in the command line, returns the single bundle fixture file
+     * @param array $load_fixtures_args
+     */
+    protected function extractSingleBundle(array $load_fixtures_args) {
+      $single_bundle = (2 == count($load_fixtures_args) ? $load_fixtures_args[1] : null);
+      if ($single_bundle && !in_array($single_bundle, $this->bundles)) {
+        throw new \Exception('Bundle fixture ' . $single_bundle . " doesn't exist.");
+      }
+
+      return $single_bundle;
+    }
+
+    /**
      * Gets all fixtures files
      */
     protected function loadFixtureFiles()
@@ -114,6 +127,8 @@ class YamlLoader
     public function loadFixtures()
     {
         $tags = $this->extractTags(func_get_args());
+        $single_bundle = $this->extractSingleBundle(func_get_args());
+
         $this->loadFixtureFiles();
         foreach ($this->fixture_files as $file) {
             $fixture_data = Yaml::parse($file);
