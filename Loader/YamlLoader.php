@@ -79,6 +79,18 @@ class YamlLoader
     {
         $this->references[$name] = $object;
     }
+    
+    /**
+     * Returns an array of tags from loadFixtures method arguments
+     * @param array $load_fixtures_args
+     */
+    protected function extractTags(array $load_fixtures_args) {
+      if (count($load_fixtures_args)) {
+        return array(0 => $load_fixtures_args[0]);
+      } else {
+        return $load_fixtures_args;
+      }
+    }
 
     /**
      * Gets all fixtures files
@@ -101,6 +113,7 @@ class YamlLoader
      */
     public function loadFixtures()
     {
+        $tags = $this->extractTags(func_get_args());
         $this->loadFixtureFiles();
         foreach ($this->fixture_files as $file) {
             $fixture_data = Yaml::parse($file);
@@ -108,13 +121,13 @@ class YamlLoader
             $persistence = isset($fixture_data['persistence']) ? $fixture_data['persistence'] : 'orm';
             $fixture = $this->getFixtureClass($persistence);
             $fixture = new $fixture($fixture_data, $this, $file);
-            $fixture->load($this->getManager($persistence), func_get_args());
+            $fixture->load($this->getManager($persistence), $tags);
         }
 
         if (!is_null($this->acl_manager)) {
             foreach ($this->fixture_files as $file) {
                 $fixture = new YamlAclFixture($file, $this);
-                $fixture->load($this->acl_manager, func_get_args());
+                $fixture->load($this->acl_manager, $tags);
             }
         }
     }

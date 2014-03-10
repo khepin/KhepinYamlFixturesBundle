@@ -25,6 +25,8 @@ class FixturesLoadCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $context = $input->getArgument('context');
+        $fixture_file = $input->getOption('fixture-file');
+
         if ($input->getOption('purge-orm')) {
             $this->getContainer()->get('khepin.yaml_loader')->purgeDatabase('orm', $input->getOption('purge-with-truncate'));
         }
@@ -32,7 +34,7 @@ class FixturesLoadCommand extends ContainerAwareCommand
             $this->getContainer()->get('khepin.yaml_loader')->purgeDatabase('mongodb');
         }
 
-        $this->getContainer()->get('khepin.yaml_loader')->loadFixtures($context);
+        $this->getContainer()->get('khepin.yaml_loader')->loadFixtures($context, $fixture_file);
 
         $output->writeln('done!');
     }
