@@ -8,40 +8,40 @@ use Symfony\Component\Yaml\Yaml;
 
 class YamlLoader
 {
-    private $bundles;
+    protected $bundles;
 
     /**
      *
      * @var type
      */
-    private $kernel;
+    protected $kernel;
 
     /**
      * Doctrine entity manager
      * @var type
      */
-    private $object_manager;
+    protected $object_manager;
 
-    private $acl_manager = null;
+    protected $acl_manager = null;
 
     /**
      * Array of all yml files containing fixtures that should be loaded
      * @var type
      */
-    private $fixture_files = array();
+    protected $fixture_files = array();
 
     /**
      * Maintains references to already created objects
      * @var type
      */
-    private $references = array();
+    protected $references = array();
 
     /**
      * The directory containing the fixtures files
      *
      * @var string
      */
-    private $directory;
+    protected $directory;
 
     public function __construct(\AppKernel $kernel, $bundles, $directory)
     {
