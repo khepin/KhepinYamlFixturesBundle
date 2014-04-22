@@ -44,7 +44,7 @@ In your `config.yml` or `config_dev.yml` (recommended) add the following:
 Under 'resources' is a list of the bundles that have fixtures that you wish to
 load. The fixtures will be loaded in that order.
 
-The `MyBundle/load_first` syntax means that `load_first.yml` will be loaded before
+The `MyOtherBundle/load_this_first` syntax means that `load_this_first.yml` will be loaded before
 The rest of the files in this bundle. This allows to set any specific order for
 loading fixture files.
 
