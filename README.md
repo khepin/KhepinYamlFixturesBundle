@@ -50,24 +50,26 @@ loading fixture files.
 
 # Define your fixture files
 
-It is important to note that unlike in Symfony1, the order in which you load your
-fixtures DOES MATTER. There's 2 ways you can manipulate that order for now:
+## Setup
 
-- In the configuration: to decide which bundles have their fixtures loaded first
-- On the fixture file names: inside of each bundle, fixture files are loaded in
-alphabetical order
+It is important to note that unlike in Symfony 1.x, the order in which you load your
+fixtures _does_ matter. There are 2 ways you can manipulate that order:
 
-By default, fixture files all go under `MyBundle/DataFixtures/somefixtures.yml`.
+- Via `config.yml`: specify which bundles have their fixtures loaded first
+- Via file name: fixture files are loaded in alphabetical order inside of each bundle
 
-If you want to put your fixtures in a different directory, juste specify it in
-your config:
+By default, fixture files use the bundle hierarchy: `MyBundle/DataFixtures/somefixtures.yml`.
+
+If you want to change the hierarchy fixtures use, specify it in your configuration:
 
     khepin_yaml_fixtures:
         directory: Resources/fixtures
+        
+This will cause your fixture files to use the bundle hierarchy: `MyBundle/Resources/fixtures/somefixtures.yml`.
 
-You can only define fixtures for one class per file.
+## Definition
 
-Fixture files are to be written in this format:
+You can only define fixtures for one class per file. Fixture files are configured at the top level, and defined within the `fixtures` key. You can name a fixture to be referenced later by supplying a name in the `fixtures` array.
 
     model: Name\Space\MyBundle\Entity\User
     tags: [ test, dev, prod ] # optional parameter
@@ -79,7 +81,7 @@ Fixture files are to be written in this format:
             phonenumber: 8765658
             birthday: "1989-12-12"
 
-You can use references to previously created fixtures:
+You can use references to previously created fixtures by supplying the name:
 
     model: Name\Space\MyBundle\Entity\Car
     fixtures:
@@ -87,7 +89,7 @@ You can use references to previously created fixtures:
             owner: michael
             since: "2010-12-12"
 
-For MongoDB's reference many, just put a list of references:
+For [MongoDB's reference many](http://doctrine-mongodb-odm.readthedocs.org/en/latest/reference/reference-mapping.html#reference-many), include your references as a list under the corresponding key:
 
     model: Name\Space\Bundle\Document\Car
     persistence: mongodb
