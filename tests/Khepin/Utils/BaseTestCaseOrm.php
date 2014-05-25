@@ -8,7 +8,6 @@ use \Mockery as m;
 use Doctrine\ORM\Tools\SchemaTool;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 use Doctrine\ORM\Mapping\DefaultQuoteStrategy;
-use Doctrine\ORM\Repository\DefaultRepositoryFactory;
 
 class BaseTestCaseOrm extends \PHPUnit_Framework_TestCase
 {
