@@ -3,6 +3,7 @@
 namespace Khepin\YamlFixturesBundle\Fixture;
 
 use Doctrine\Common\Util\Inflector;
+use Doctrine\ORM\Mapping\ClassMetadataInfo;
 
 class OrmYamlFixture extends AbstractFixture
 {
@@ -24,12 +25,23 @@ class OrmYamlFixture extends AbstractFixture
                 }
                 $object->$method($value);
             } elseif (in_array($field, $associations)) { // This field is an association
-                if (is_array($value)) { // The field is an array of associations
-                    $referenceArray = array();
-                    foreach ($value as $referenceObject) {
-                        $referenceArray[] = $this->loader->getReference($referenceObject);
+                if (is_array($value)) {
+
+                    if ($metadata->associationMappings[$field]['type'] == ClassMetadataInfo::ONE_TO_ONE &&
+                        isset($value['_model']) &&
+                        isset($value['_fixture'])
+                    ) {
+                        // The field is a embedded one to one association
+                       $oneToOneObject = $this->createObject($value['_model'], $value['_fixture'], $this->getMetadataForClass($value['_model']));
+                       $object->$method($oneToOneObject);
+                    } else {
+                        // The field is an array of associations
+                        $referenceArray = array();
+                        foreach ($value as $referenceObject) {
+                            $referenceArray[] = $this->loader->getReference($referenceObject);
+                        }
+                        $object->$method($referenceArray);
                     }
-                    $object->$method($referenceArray);
                 } else {
                     $object->$method($this->loader->getReference($value));
                 }

@@ -107,6 +107,7 @@ class BaseTestCaseOrm extends \PHPUnit_Framework_TestCase
 
         $entities = array(
             'Khepin\\Fixture\\Entity\\Car',
+            'Khepin\\Fixture\\Entity\\Engine',
             'Khepin\\Fixture\\Entity\\Driver',
             'Khepin\\Fixture\\Entity\\Owner'
         );

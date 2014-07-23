@@ -33,6 +33,11 @@ class Car
      */
     private $owner;
 
+    /**
+     * @ORM\OneToOne(targetEntity="Engine", inversedBy="car", cascade={"persist", "remove"})
+     */
+    private $engine;
+
     public function getId()
     {
         return $this->id;
@@ -73,4 +78,24 @@ class Car
     {
         return $this->owner;
     }
+
+    /**
+     * @param mixed $engine
+     * @return $this
+     */
+    public function setEngine($engine)
+    {
+        $this->engine = $engine;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getEngine()
+    {
+        return $this->engine;
+    }
+
+
 }
