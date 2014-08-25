@@ -79,12 +79,42 @@ class YamlLoader
     {
         $this->references[$name] = $object;
     }
+    
+    /**
+     * Returns an array of tags from loadFixtures method arguments
+     * @param array $load_fixtures_args
+     */
+    protected function extractTags(array $load_fixtures_args) {
+      if (count($load_fixtures_args)) {
+        return array(0 => $load_fixtures_args[0]);
+      } else {
+        return $load_fixtures_args;
+      }
+    }
+
+    /**
+     * If it was specified in the command line, returns the single bundle fixture file
+     * @param array $load_fixtures_args
+     */
+    protected function extractSingleBundle(array $load_fixtures_args) {
+      $single_bundle = (2 == count($load_fixtures_args) ? $load_fixtures_args[1] : null);
+      if ($single_bundle && !in_array($single_bundle, $this->bundles)) {
+        throw new \Exception('Bundle fixture ' . $single_bundle . " doesn't exist.");
+      }
+
+      return $single_bundle;
+    }
 
     /**
      * Gets all fixtures files
+     * @param string $single_bundle Single bundle fixture file if it was specified.
      */
-    protected function loadFixtureFiles()
+    protected function loadFixtureFiles($single_bundle = null)
     {
+        if ($single_bundle) {
+          $this->bundles = array($single_bundle);
+        }
+
         foreach ($this->bundles as $bundle) {
             $file = '*';
             if (strpos($bundle, '/')) {
@@ -101,20 +131,23 @@ class YamlLoader
      */
     public function loadFixtures()
     {
-        $this->loadFixtureFiles();
+        $tags = $this->extractTags(func_get_args());
+        $single_bundle = $this->extractSingleBundle(func_get_args());
+
+        $this->loadFixtureFiles($single_bundle);
         foreach ($this->fixture_files as $file) {
             $fixture_data = Yaml::parse($file);
             // if nothing is specified, we use doctrine orm for persistence
             $persistence = isset($fixture_data['persistence']) ? $fixture_data['persistence'] : 'orm';
             $fixture = $this->getFixtureClass($persistence);
             $fixture = new $fixture($fixture_data, $this, $file);
-            $fixture->load($this->getManager($persistence), func_get_args());
+            $fixture->load($this->getManager($persistence), $tags);
         }
 
         if (!is_null($this->acl_manager)) {
             foreach ($this->fixture_files as $file) {
                 $fixture = new YamlAclFixture($file, $this);
-                $fixture->load($this->acl_manager, func_get_args());
+                $fixture->load($this->acl_manager, $tags);
             }
         }
     }
