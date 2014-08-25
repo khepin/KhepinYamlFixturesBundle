@@ -48,7 +48,7 @@ class MongoYamlFixture extends AbstractFixture
                         }
                     }
                 } else {
-                    if ($type == 'datetime' OR $type == 'date') {
+                    if ($type == 'datetime' OR $type == 'date' OR $type == 'time') {
                         $value = new \DateTime($value);
                     }
                     if ($type == 'one') {
