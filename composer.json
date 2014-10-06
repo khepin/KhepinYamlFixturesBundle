@@ -19,7 +19,7 @@
     },
     "require-dev": {
         "doctrine/mongodb-odm": "*@beta",
-        "doctrine/mongodb": "*@beta",
+        "doctrine/mongodb": "~1.1",
         "doctrine/mongodb-odm-bundle": "3.*@beta",
         "mockery/mockery": "dev-master"
     },

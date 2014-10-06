@@ -3,11 +3,11 @@
 namespace Khepin\Utils;
 
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Repository\DefaultRepositoryFactory;
 use \Mockery as m;
 use Doctrine\ORM\Tools\SchemaTool;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 use Doctrine\ORM\Mapping\DefaultQuoteStrategy;
-use Doctrine\ORM\Repository\DefaultRepositoryFactory;
 
 class BaseTestCaseOrm extends \PHPUnit_Framework_TestCase
 {
@@ -53,6 +53,15 @@ class BaseTestCaseOrm extends \PHPUnit_Framework_TestCase
                 ->method('getDefaultRepositoryClassName')
                 ->will($this->returnValue('Doctrine\\ORM\\EntityRepository'))
         ;
+
+        $repositoryFactory = new DefaultRepositoryFactory();
+
+        $config
+                ->expects($this->any())
+                ->method('getRepositoryFactory')
+                ->will($this->returnValue($repositoryFactory))
+        ;
+
 
         $quoteStrategy = new DefaultQuoteStrategy();
 

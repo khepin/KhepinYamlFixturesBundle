@@ -78,9 +78,9 @@ class MongoFixtureTest extends BaseTestCaseMongo
         $loader->purgeDatabase('mongodb');
 
         $cars = $this->doctrine->getManager()->getRepository('Khepin\Fixture\Document\Car')->findAll();
-        $this->assertEquals($cars->count(), 0);
+        $this->assertEquals(0, count($cars));
         $drivers = $this->doctrine->getManager()->getRepository('Khepin\Fixture\Document\Driver')->findAll();
-        $this->assertEquals($drivers->count(), 0);
+        $this->assertEquals(0, count($drivers));
     }
 
     public function testContext()
@@ -143,8 +143,8 @@ class MongoFixtureTest extends BaseTestCaseMongo
 
         $repo = $this->doctrine->getManager()->getRepository('Khepin\Fixture\Document\Article');
         $articles = $repo->findAll();
-        $this->assertEquals($articles->count(), 1);
-        $article = $articles->getNext();
+        $this->assertEquals(1, count($articles));
+        $article = $articles[0];
         $this->assertInstanceOf('Khepin\Fixture\Document\Article', $article);
         $author = $article->getAuthor();
         $this->assertInstanceOf('Khepin\Fixture\Document\Author', $author);
@@ -159,12 +159,12 @@ class MongoFixtureTest extends BaseTestCaseMongo
 
         $repo = $this->doctrine->getManager()->getRepository('Khepin\Fixture\Document\Article');
         $articles = $repo->findAll();
-        $this->assertEquals($articles->count(), 1);
-        $article = $articles->getNext();
+        $this->assertEquals(1, count($articles));
+        $article = $articles[0];
         $this->assertInstanceOf('Khepin\Fixture\Document\Article', $article);
         $tags = $article->getTags();
         $this->assertEquals('YAML', $tags[0]->getName());
-        $this->assertEquals($tags->count(), 2);
+        $this->assertEquals(2, count($tags));
     }
 
 }
