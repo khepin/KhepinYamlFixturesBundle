@@ -14,19 +14,20 @@ class MongoFixtureTest extends BaseTestCaseMongo
     {
         $this->getDoctrine();
         $service = m::mock()->shouldReceive('lowerCaseName')->withAnyArgs()->andReturnUsing(
-                function($car){
-                        $car->setName(strtolower($car->getName()));
-                }
+            function ($car) {
+                    $car->setName(strtolower($car->getName()));
+            }
         )->mock();
         $container = m::mock('Container')
                 ->shouldReceive('get')->with('my_service')->andReturn($service)
                 ->shouldReceive('get')->withAnyArgs()->andReturn($this->doctrine)
                 ->mock();
         $this->kernel = m::mock(
-                'AppKernel', array(
-                        'locateResource' => __DIR__ . '/mongo/',
-                        'getContainer'   => $container
-                )
+            '\Symfony\Component\HttpKernel\KernelInterface',
+            array(
+                    'locateResource' => __DIR__ . '/mongo/',
+                    'getContainer'   => $container
+            )
         );
         $loader = new YamlLoader($this->kernel, array('SomeBundle'), 'DataFixtures');
         $loader->purgeDatabase('mongodb');
@@ -78,9 +79,10 @@ class MongoFixtureTest extends BaseTestCaseMongo
         $loader->purgeDatabase('mongodb');
 
         $cars = $this->doctrine->getManager()->getRepository('Khepin\Fixture\Document\Car')->findAll();
-        $this->assertEquals($cars->count(), 0);
+        $this->assertEquals(count($cars), 0);
+
         $drivers = $this->doctrine->getManager()->getRepository('Khepin\Fixture\Document\Driver')->findAll();
-        $this->assertEquals($drivers->count(), 0);
+        $this->assertEquals(count($drivers), 0);
     }
 
     public function testContext()
@@ -142,7 +144,7 @@ class MongoFixtureTest extends BaseTestCaseMongo
         $loader->loadFixtures('embed_one');
 
         $repo = $this->doctrine->getManager()->getRepository('Khepin\Fixture\Document\Article');
-        $articles = $repo->findAll();
+        $articles = $repo->createQueryBuilder()->getQuery()->execute();
         $this->assertEquals($articles->count(), 1);
         $article = $articles->getNext();
         $this->assertInstanceOf('Khepin\Fixture\Document\Article', $article);
@@ -158,7 +160,7 @@ class MongoFixtureTest extends BaseTestCaseMongo
         $loader->loadFixtures('embed_many');
 
         $repo = $this->doctrine->getManager()->getRepository('Khepin\Fixture\Document\Article');
-        $articles = $repo->findAll();
+        $articles = $repo->createQueryBuilder()->getQuery()->execute();
         $this->assertEquals($articles->count(), 1);
         $article = $articles->getNext();
         $this->assertInstanceOf('Khepin\Fixture\Document\Article', $article);
@@ -166,5 +168,4 @@ class MongoFixtureTest extends BaseTestCaseMongo
         $this->assertEquals('YAML', $tags[0]->getName());
         $this->assertEquals($tags->count(), 2);
     }
-
 }

@@ -13,9 +13,9 @@ class YamlAclFixture extends AbstractFixture
         foreach ($this->file['acl'] as $reference => $permissions) {
             foreach ($permissions as $user => $permission) {
                 $acl_manager->setObjectPermission(
-                        $this->loader->getReference($reference),
-                        $this->getMask($permission),
-                        $this->loader->getReference($user)
+                    $this->loader->getReference($reference),
+                    $this->getMask($permission),
+                    $this->loader->getReference($user)
                 );
             }
         }

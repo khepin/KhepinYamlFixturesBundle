@@ -31,7 +31,7 @@ abstract class AbstractFixture
     public function hasTag(Array $tags)
     {
         // if no tags were specified, the fixture should always be loaded
-        if (count($this->tags) == 0 || count(array_intersect($this->tags, $tags)) > 0 ) {
+        if (count($this->tags) == 0 || count(array_intersect($this->tags, $tags)) > 0) {
             return true;
         }
 
