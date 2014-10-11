@@ -1,15 +1,15 @@
 language: php
 
-php: 
+php:
   - 5.3
   - 5.4
+  - 5.5
 
 services: mongodb
 
 before_script:
-  - ./bin/travis-mongo-installer.sh > /dev/null
+  - phpenv config-add etc/phpconfig.ini
   - curl -s http://getcomposer.org/installer | php
   - php composer.phar install --dev
 
 script: phpunit -c tests/
-
