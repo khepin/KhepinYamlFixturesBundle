@@ -44,8 +44,8 @@ class BaseTestCaseMongo extends \PHPUnit_Framework_TestCase
     protected function getMetadataDriverImplementation()
     {
         return new AnnotationDriver(
-                $_ENV['annotation_reader'],
-                __DIR__.'/../Fixture/Document'
+            $_ENV['annotation_reader'],
+            __DIR__.'/../Fixture/Document'
         );
     }
 

@@ -33,12 +33,15 @@ class MongoYamlFixture extends AbstractFixture
                 if ($type == 'many') {
                     $method = Inflector::camelize('add_'.$field);
                     // EmbedMany
-                    if (isset($metadata->fieldMappings[$field]['embedded']) && $metadata->fieldMappings[$field]['embedded']) {
+                    if (
+                        isset($metadata->fieldMappings[$field]['embedded']) &&
+                        $metadata->fieldMappings[$field]['embedded']) {
                         foreach ($value as $embedded_value) {
                             $embed_class = $metadata->fieldMappings[$field]['targetDocument'];
                             $embed_data = $embedded_value;
                             $embed_meta = $this->getMetaDataForClass($embed_class);
-                            $value = $this->createObject($embed_class, $embed_data, $embed_meta, array('embedded' => true));
+                            $value = $this->createObject($embed_class, $embed_data, $embed_meta, array(
+                                'embedded' => true));
                             $object->$method($value);
                         }
                     //ReferenceMany
@@ -48,16 +51,19 @@ class MongoYamlFixture extends AbstractFixture
                         }
                     }
                 } else {
-                    if ($type == 'datetime' OR $type == 'date' OR $type == 'time') {
+                    if ($type == 'datetime' || $type == 'date' || $type == 'time') {
                         $value = new \DateTime($value);
                     }
                     if ($type == 'one') {
                         // EmbedOne
-                        if (isset($metadata->fieldMappings[$field]['embedded']) && $metadata->fieldMappings[$field]['embedded']) {
+                        if (
+                            isset($metadata->fieldMappings[$field]['embedded']) &&
+                            $metadata->fieldMappings[$field]['embedded']) {
                             $embed_class = $metadata->fieldMappings[$field]['targetDocument'];
                             $embed_data = $value;
                             $embed_meta = $this->getMetaDataForClass($embed_class);
-                            $value = $this->createObject($embed_class, $embed_data, $embed_meta, array('embedded' => true));
+                            $value = $this->createObject($embed_class, $embed_data, $embed_meta, array(
+                                'embedded' => true));
                         // ReferenceOne
                         } else {
                             $value = $this->loader->getReference($value);

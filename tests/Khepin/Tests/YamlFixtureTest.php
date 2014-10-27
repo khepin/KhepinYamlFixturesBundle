@@ -14,19 +14,20 @@ class YamlFixtureTest extends BaseTestCaseOrm
     {
         $this->getDoctrine();
         $service = m::mock()->shouldReceive('lowerCaseName')->withAnyArgs()->andReturnUsing(
-                function($car){
-                        $car->setName(strtolower($car->getName()));
-                }
+            function ($car) {
+                    $car->setName(strtolower($car->getName()));
+            }
         )->mock();
         $container = m::mock('Container')
                 ->shouldReceive('get')->with('my_service')->andReturn($service)
                 ->shouldReceive('get')->withAnyArgs()->andReturn($this->doctrine)
                 ->mock();
         $this->kernel = m::mock(
-                'AppKernel', array(
-                        'locateResource' => __DIR__ . '/simple_loading/',
-                        'getContainer'   => $container
-                )
+            '\Symfony\Component\HttpKernel\KernelInterface',
+            array(
+                    'locateResource' => __DIR__ . '/simple_loading/',
+                    'getContainer'   => $container
+            )
         );
     }
 
