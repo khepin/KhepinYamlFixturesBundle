@@ -124,7 +124,7 @@ class YamlFixtureTest extends BaseTestCaseOrm
         $firstCar = $cars[0];
         $firstCarIdBefore = $firstCar->getId();
 
-        $loader->purgeDatabase('orm', true);
+        $loader->purgeDatabase('orm', null, true);
 
         $cars = $this->doctrine->getEntityManager()->getRepository('Khepin\Fixture\Entity\Car')->findAll();
         $this->assertEmpty($cars);

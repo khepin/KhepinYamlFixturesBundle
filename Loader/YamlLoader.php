@@ -107,9 +107,13 @@ class YamlLoader
             $fixture_data = Yaml::parse($file);
             // if nothing is specified, we use doctrine orm for persistence
             $persistence = isset($fixture_data['persistence']) ? $fixture_data['persistence'] : 'orm';
+
+            $persister = $this->getPersister($persistence);
+            $manager = $persister->getManagerForClass($fixture_data['model']);
+
             $fixture = $this->getFixtureClass($persistence);
             $fixture = new $fixture($fixture_data, $this, $file);
-            $fixture->load($this->getManager($persistence), func_get_args());
+            $fixture->load($manager, func_get_args());
         }
 
         if (!is_null($this->acl_manager)) {
@@ -123,7 +127,7 @@ class YamlLoader
     /**
      * Remove all fixtures from the database
      */
-    public function purgeDatabase($persistence, $withTruncate = false)
+    public function purgeDatabase($persistence, $databaseName = null, $withTruncate = false)
     {
         $purgetools = array(
             'orm'       => array(
@@ -138,32 +142,36 @@ class YamlLoader
         // Retrieve the correct purger and executor
         $purge_class = $purgetools[$persistence]['purger'];
         $executor_class = $purgetools[$persistence]['executor'];
+
         // Instanciate purger and executor
-        $purger = new $purge_class($this->getManager($persistence));
+        $persister = $this->getPersister($persistence);
+        $entityManagers = ($databaseName) 
+            ? array($persister->getManager($databaseName))
+            : $persister->getManagers();
 
-        // Check if the purger supports setting the purge mode
-        if ($withTruncate && $purger instanceof ORMPurger) {
-            $purger->setPurgeMode(ORMPurger::PURGE_MODE_TRUNCATE);
+        foreach($entityManagers as $entityManager) {
+            $purger = new $purge_class($entityManager);
+            if ($withTruncate && $purger instanceof ORMPurger) {
+                $purger->setPurgeMode(ORMPurger::PURGE_MODE_TRUNCATE);
+            }
+            $executor = new $executor_class($entityManager, $purger);
+            // purge
+            $executor->purge();
         }
-
-        $executor = new $executor_class($this->getManager($persistence), $purger);
-        // purge
-        $executor->purge();
     }
 
-    /**
-     * Returns a doctrine object manager for the given persistence layer
-     * @return ObjectManager
+    /*
+     * Returns the doctrine persister for the given persistence layer
+     * @return ManagerRegistry
      */
-    public function getManager($persistence)
+    public function getPersister($persistence)
     {
         $managers = array(
             'orm'       => 'doctrine',
             'mongodb'   => 'doctrine_mongodb',
         );
 
-        return $this->kernel->getContainer()
-            ->get($managers[$persistence])->getManager();
+        return $this->kernel->getContainer()->get($managers[$persistence]);
     }
 
     /**
