@@ -62,7 +62,11 @@ class BaseTestCaseMongo extends \PHPUnit_Framework_TestCase
         $config = $this->getMockAnnotatedConfig();
         $dm = \Doctrine\ODM\MongoDB\DocumentManager::create(null, $config);
 
-        return $this->doctrine = m::mock(array('getManager' => $dm));
+        return $this->doctrine = m::mock(array(
+            'getManager' => $dm, 
+            'getManagers' => array($dm),
+            'getManagerForClass' => $dm
+        ));
 
         // $conn = array(
         //     'driver' => 'pdo_sqlite',

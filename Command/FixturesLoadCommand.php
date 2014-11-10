@@ -26,6 +26,12 @@ class FixturesLoadCommand extends ContainerAwareCommand
                 'If set, will purge the database before importing new fixtures'
             )
             ->addOption(
+                'database-name',
+                null,
+                InputArgument::OPTIONAL,
+                'If set, will purge the database specified. If not set, will purge all databases. (require purge option)'
+            )
+            ->addOption(
                 'purge-mongodb',
                 null,
                 InputOption::VALUE_NONE,
@@ -46,11 +52,15 @@ class FixturesLoadCommand extends ContainerAwareCommand
         if ($input->getOption('purge-orm')) {
             $this->getContainer()->get('khepin.yaml_loader')->purgeDatabase(
                 'orm',
+                $input->getOption('database-name'),
                 $input->getOption('purge-with-truncate')
             );
         }
         if ($input->getOption('purge-mongodb')) {
-            $this->getContainer()->get('khepin.yaml_loader')->purgeDatabase('mongodb');
+            $this->getContainer()->get('khepin.yaml_loader')->purgeDatabase(
+                'mongodb',
+                $input->getOption('database-name')
+            );
         }
 
         $this->getContainer()->get('khepin.yaml_loader')->loadFixtures($context);
