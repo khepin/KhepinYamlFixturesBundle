@@ -189,4 +189,16 @@ class YamlFixtureTest extends BaseTestCaseOrm
         $this->assertEquals(get_class($car2), 'Khepin\Fixture\Entity\Car');
         $this->assertEquals('BMW', $car2->getName());
     }
+
+    public function testOneToOneAssociation()
+    {
+        $loader = new YamlLoader($this->kernel, array('SomeBundle'), 'DataFixtures');
+        $loader->loadFixtures('one_to_one');
+
+        $repo = $this->doctrine->getManager()->getRepository('Khepin\Fixture\Entity\Car');
+        $cars = $repo->findById(array(3,4));
+
+        $this->assertInstanceOf('Khepin\Fixture\Entity\Engine', $cars[0]->getEngine());
+        $this->assertInstanceOf('Khepin\Fixture\Entity\Engine', $cars[1]->getEngine());
+    }
 }

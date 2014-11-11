@@ -101,6 +101,22 @@ For [MongoDB's reference many](http://doctrine-mongodb-odm.readthedocs.org/en/la
 You can also define as many files as you want for the same entity. This will be
 useful when used together with context tags (see below).
 
+##One-to-one
+For Doctrine's one-to-one associations, a related object can be created without requiring a separate file.
+The model requires `cascade={"persist"}` definition on the join, `remove` is also recommended `eg. cascade={"persist", "remove"}`
+for the --purge-orm command to work
+
+    model: Name\Space\MyBundle\Entity\Car
+    fixtures:
+        audi_a3:
+            name: Audi A3
+            datePurchased: "2013-02-01"
+            engine:
+                _model: Name\Space\MyBundle\Entity\Engine
+                _fixture:
+                    type: Petrol
+                    rating: 2000
+
 
 ##Work with dates and times:
 

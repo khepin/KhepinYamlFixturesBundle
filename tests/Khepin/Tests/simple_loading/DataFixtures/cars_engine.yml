@@ -1,0 +1,19 @@
+model: Khepin\Fixture\Entity\Car
+tags: [one_to_one]
+fixtures:
+  prius:
+    name: Toyota Prius
+    date_purchased: "2012-01-01"
+    engine:
+      _model: Khepin\Fixture\Entity\Engine
+      _fixture:
+        type: hybrid
+        rating: 2000
+  ferrari:
+    name: Ferrari
+    date_purchased: "2013-04-06"
+    engine:
+      _model: Khepin\Fixture\Entity\Engine
+      _fixture:
+        type: petrol
+        rating: 4000
