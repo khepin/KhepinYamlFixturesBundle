@@ -1,0 +1,7 @@
+model: Khepin\Fixture\Entity\Car
+tags: [ construct ]
+fixtures:
+  ford:
+    __construct:
+      - Ford
+      - {type: datetime, value: "2012-01-01"}

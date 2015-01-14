@@ -29,9 +29,13 @@ class Owner
      */
     private $owned_cars;
 
-    public function __construct()
+    public function __construct($name = null, Car $car = null)
     {
         $this->owned_cars = new ArrayCollection();
+        $this->name = $name;
+        if ($car) {
+            $this->owned_cars->add($car);
+        }
     }
 
     public function getId()
