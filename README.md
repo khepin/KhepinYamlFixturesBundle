@@ -221,6 +221,32 @@ already defined in previously loaded files.
 The YAML loader will create a plain PHP array of the three objects and pass it to,
 for example, setParts() on the model you are defining in this file.
 
+## Constructor
+
+If you want to pass arguments to a constructor :
+
+    fixtures:
+        car:
+            __construct:
+                - Ford
+                - {type: reference , value: owner_ford}
+                - {type: datetime, value: "2012-01-01"}
+
+```php
+class Car
+{
+    /**
+     * @param string $name
+     * @param Owner $owner
+     * @param DateTime $purchaseDate
+     */
+    public function __construct($name, Owner $owner, \DateTime $purchaseDate, )
+    {
+        ...
+    }
+}
+```
+
 ## Service calls
 
 Some entities require being managed by a special service before they can be persisted.

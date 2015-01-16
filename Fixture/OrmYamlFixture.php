@@ -11,7 +11,31 @@ class OrmYamlFixture extends AbstractFixture
         $mapping = array_keys($metadata->fieldMappings);
         $associations = array_keys($metadata->associationMappings);
 
-        $object = new $class;
+        $class = new \ReflectionClass($class);
+        $constructArguments = array();
+        if (isset($data['__construct'])) {
+            $arguments = $data['__construct'];
+            if (is_array($arguments)) {
+                foreach($arguments as $argument) {
+                    if (is_array($argument)) {
+                        if ($argument['type'] == 'datetime') {
+                            $constructArguments[] = new \DateTime($argument['value']);
+                        } elseif ($argument['type'] == 'reference') {
+                            $constructArguments[] = $this->loader->getReference($argument['value']);
+                        } else {
+                            $constructArguments[] = $argument['value'];
+                        }
+                    } else {
+                        $constructArguments[] = $argument;
+                    }
+                }
+            } else {
+                $constructArguments[] = $arguments;
+            }
+            unset($data['__construct']);
+        }
+        $object = $class->newInstanceArgs($constructArguments);
+
         foreach ($data as $field => $value) {
             // Add the fields defined in the fistures file
             $method = Inflector::camelize('set_' . $field);
