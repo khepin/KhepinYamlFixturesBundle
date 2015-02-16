@@ -2,7 +2,7 @@
 
 namespace Khepin\YamlFixturesBundle\Fixture;
 
-use Doctrine\Common\Util\Inflector;
+use Symfony\Component\PropertyAccess\PropertyAccess;
 
 class OrmYamlFixture extends AbstractFixture
 {
@@ -36,32 +36,27 @@ class OrmYamlFixture extends AbstractFixture
         }
         $object = $class->newInstanceArgs($constructArguments);
 
+        $accessor = PropertyAccess::createPropertyAccessor();
         foreach ($data as $field => $value) {
-            // Add the fields defined in the fistures file
-            $method = Inflector::camelize('set_' . $field);
-            //
             if (in_array($field, $mapping)) {
                 // Dates need to be converted to DateTime objects
                 $type = $metadata->fieldMappings[$field]['type'];
                 if ($type == 'datetime' || $type == 'date' || $type == 'time') {
                     $value = new \DateTime($value);
                 }
-                $object->$method($value);
+                $accessor->setValue($object, $field, $value);
             } elseif (in_array($field, $associations)) { // This field is an association
                 if (is_array($value)) { // The field is an array of associations
                     $referenceArray = array();
                     foreach ($value as $referenceObject) {
                         $referenceArray[] = $this->loader->getReference($referenceObject);
                     }
-                    $object->$method($referenceArray);
+                    $accessor->setValue($object, $field, $referenceArray);
                 } else {
-                    $object->$method($this->loader->getReference($value));
+                    $accessor->setValue($object, $field, $this->loader->getReference($value)); 
                 }
             } else {
-                // It's a method call that will set a field named differently
-                // eg: FOSUserBundle ->setPlainPassword sets the password after
-                // Encrypting it
-                $object->$method($value);
+                $accessor->setValue($object, $field, $value);
             }
         }
         $this->runServiceCalls($object);
