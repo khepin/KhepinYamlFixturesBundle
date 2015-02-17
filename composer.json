@@ -12,8 +12,8 @@
         }
     ],
     "require": {
-        "doctrine/data-fixtures": "1.*@alpha",
-        "doctrine/doctrine-fixtures-bundle": "2.*@alpha",
+        "doctrine/data-fixtures": "~1.0",
+        "doctrine/doctrine-fixtures-bundle": "~2.2",
         "doctrine/orm": "2.*",
         "doctrine/doctrine-bundle": "*",
         "symfony/property-access": "~2.3"
