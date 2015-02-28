@@ -21,7 +21,9 @@
         "doctrine/mongodb-odm": "*@beta",
         "doctrine/mongodb": "*@beta",
         "doctrine/mongodb-odm-bundle": "3.*@beta",
-        "mockery/mockery": "dev-master"
+        "mockery/mockery": "dev-master",
+        "phpunit/phpunit": "~4.5",
+        "ext-pdo_sqlite": "*"
     },
     "autoload": {
         "psr-0": {
