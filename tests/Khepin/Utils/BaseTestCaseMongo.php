@@ -5,7 +5,6 @@ namespace Khepin\Utils;
 use Doctrine\ORM\EntityManager;
 use \Mockery as m;
 use Doctrine\ODM\MongoDB\Mapping\Driver\AnnotationDriver;
-use Doctrine\ODM\MongoDB\Repository\DefaultRepositoryFactory;
 
 class BaseTestCaseMongo extends \PHPUnit_Framework_TestCase
 {
