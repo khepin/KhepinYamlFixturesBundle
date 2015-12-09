@@ -81,8 +81,8 @@ class BaseTestCaseOrm extends \PHPUnit_Framework_TestCase
     protected function getMetadataDriverImplementation()
     {
         return new AnnotationDriver(
-                $_ENV['annotation_reader'],
-                array(__DIR__.'/../Fixture/Entity')
+            $_ENV['annotation_reader'],
+            array(__DIR__.'/../Fixture/Entity')
         );
     }
 
@@ -111,21 +111,21 @@ class BaseTestCaseOrm extends \PHPUnit_Framework_TestCase
             'Khepin\\Fixture\\Entity\\Owner'
         );
 
-        $schema = array_map(function($class) use ($em) {
-                    return $em->getClassMetadata($class);
-                }, $entities);
+        $schema = array_map(function ($class) use ($em) {
+            return $em->getClassMetadata($class);
+        }, $entities);
 
         $schemaTool = new SchemaTool($em);
         $schemaTool->dropSchema(array());
         $schemaTool->createSchema($schema);
 
-        return $this->doctrine = m::mock(array(
-            'getEntityManager'      => $em,
-            'getManager'            => $em,
-            'getManagers'           => array($em),
-            'getManagerForClass'    => $em
+        return $this->doctrine = m::mock(
+            array(
+                'getEntityManager'      => $em,
+                'getManager'            => $em,
+                'getManagers'           => array($em),
+                'getManagerForClass'    => $em
             )
         );
     }
-
 }

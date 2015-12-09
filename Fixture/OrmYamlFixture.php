@@ -16,7 +16,7 @@ class OrmYamlFixture extends AbstractFixture
         if (isset($data['__construct'])) {
             $arguments = $data['__construct'];
             if (is_array($arguments)) {
-                foreach($arguments as $argument) {
+                foreach ($arguments as $argument) {
                     if (is_array($argument)) {
                         if ($argument['type'] == 'datetime') {
                             $constructArguments[] = new \DateTime($argument['value']);

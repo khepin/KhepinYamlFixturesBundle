@@ -14,5 +14,4 @@ class KhepinYamlFixturesBundle extends Bundle
 
         $container->addCompilerPass(new YamlFixturesPass());
     }
-
 }

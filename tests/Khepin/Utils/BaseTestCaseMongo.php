@@ -64,7 +64,7 @@ class BaseTestCaseMongo extends \PHPUnit_Framework_TestCase
         $dm = \Doctrine\ODM\MongoDB\DocumentManager::create(null, $config);
 
         return $this->doctrine = m::mock(array(
-            'getManager' => $dm, 
+            'getManager' => $dm,
             'getManagers' => array($dm),
             'getManagerForClass' => $dm
         ));
@@ -96,5 +96,4 @@ class BaseTestCaseMongo extends \PHPUnit_Framework_TestCase
         //     )
         // );
     }
-
 }

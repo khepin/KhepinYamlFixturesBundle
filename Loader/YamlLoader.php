@@ -145,11 +145,11 @@ class YamlLoader
 
         // Instanciate purger and executor
         $persister = $this->getPersister($persistence);
-        $entityManagers = ($databaseName) 
+        $entityManagers = ($databaseName)
             ? array($persister->getManager($databaseName))
             : $persister->getManagers();
 
-        foreach($entityManagers as $entityManager) {
+        foreach ($entityManagers as $entityManager) {
             $purger = new $purge_class($entityManager);
             if ($withTruncate && $purger instanceof ORMPurger) {
                 $purger->setPurgeMode(ORMPurger::PURGE_MODE_TRUNCATE);

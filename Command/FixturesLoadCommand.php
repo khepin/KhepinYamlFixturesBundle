@@ -29,7 +29,8 @@ class FixturesLoadCommand extends ContainerAwareCommand
                 'database-name',
                 null,
                 InputArgument::OPTIONAL,
-                'If set, will purge the database specified. If not set, will purge all databases. (require purge option)'
+                'If set, will purge the database specified. If not set, will purge all
+                databases. (require purge option)'
             )
             ->addOption(
                 'purge-mongodb',
