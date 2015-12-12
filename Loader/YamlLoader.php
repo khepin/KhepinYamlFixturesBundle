@@ -104,7 +104,7 @@ class YamlLoader
     {
         $this->loadFixtureFiles();
         foreach ($this->fixture_files as $file) {
-            $fixture_data = Yaml::parse($file);
+            $fixture_data = Yaml::parse(file_get_contents($file));
             // if nothing is specified, we use doctrine orm for persistence
             $persistence = isset($fixture_data['persistence']) ? $fixture_data['persistence'] : 'orm';
 
@@ -145,11 +145,11 @@ class YamlLoader
 
         // Instanciate purger and executor
         $persister = $this->getPersister($persistence);
-        $entityManagers = ($databaseName) 
+        $entityManagers = ($databaseName)
             ? array($persister->getManager($databaseName))
             : $persister->getManagers();
 
-        foreach($entityManagers as $entityManager) {
+        foreach ($entityManagers as $entityManager) {
             $purger = new $purge_class($entityManager);
             if ($withTruncate && $purger instanceof ORMPurger) {
                 $purger->setPurgeMode(ORMPurger::PURGE_MODE_TRUNCATE);
