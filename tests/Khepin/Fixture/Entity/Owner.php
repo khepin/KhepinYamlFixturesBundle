@@ -2,15 +2,14 @@
 
 namespace Khepin\Fixture\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity()
  */
 class Owner
 {
-
     /**
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -25,6 +24,7 @@ class Owner
 
     /**
      * @ORM\OneToMany(targetEntity="Car", mappedBy="owner")
+     *
      * @var ArrayCollection
      */
     private $owned_cars;

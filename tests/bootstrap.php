@@ -1,4 +1,5 @@
 <?php
+
 // @codingStandardsIgnoreFile
 
 if (!class_exists('PHPUnit_Framework_TestCase') ||
@@ -14,7 +15,7 @@ if (!class_exists('PHPUnit_Framework_MockObject_MockBuilder')) {
 define('TESTS_PATH', __DIR__);
 require_once __DIR__.'/../vendor/autoload.php';
 
-spl_autoload_register(function($class) {
+spl_autoload_register(function ($class) {
     if (0 === strpos($class, 'Khepin\\YamlFixturesBundle\\')) {
         $path = __DIR__.'/../'.implode('/', array_slice(explode('\\', $class), 2)).'.php';
         if (!stream_resolve_include_path($path)) {

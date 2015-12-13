@@ -2,9 +2,9 @@
 
 namespace Khepin\YamlFixturesBundle;
 
-use Symfony\Component\HttpKernel\Bundle\Bundle;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Khepin\YamlFixturesBundle\DependencyInjection\Compiler\YamlFixturesPass;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 class KhepinYamlFixturesBundle extends Bundle
 {

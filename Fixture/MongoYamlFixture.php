@@ -7,25 +7,26 @@ use Doctrine\Common\Util\Inflector;
 class MongoYamlFixture extends AbstractFixture
 {
     /**
-     * Creates and returns one object based on the given data and metadata
+     * Creates and returns one object based on the given data and metadata.
      *
      * @param $class object's class name
      * @param $data array of the object's fixture data
      * @param $metadata the class metadata for doctrine
      * @param $embedded true for embedded documents
-     * @return Object
+     *
+     * @return object
      */
-    public function createObject($class, $data, $metadata, $options = array())
+    public function createObject($class, $data, $metadata, $options = [])
     {
         // options to state if a document is to be embedded or persisted on its own
         $embedded = isset($options['embedded']);
         $mapping = array_keys($metadata->fieldMappings);
         // Instantiate new object
-        $object = new $class;
+        $object = new $class();
 
         foreach ($data as $field => $value) {
             // Add the fields defined in the fixtures file
-            $method = Inflector::camelize('set_' . $field);
+            $method = Inflector::camelize('set_'.$field);
             // This is a standard field
             if (in_array($field, $mapping)) {
                 // Dates need to be converted to DateTime objects
@@ -40,8 +41,8 @@ class MongoYamlFixture extends AbstractFixture
                             $embed_class = $metadata->fieldMappings[$field]['targetDocument'];
                             $embed_data = $embedded_value;
                             $embed_meta = $this->getMetaDataForClass($embed_class);
-                            $value = $this->createObject($embed_class, $embed_data, $embed_meta, array(
-                                'embedded' => true));
+                            $value = $this->createObject($embed_class, $embed_data, $embed_meta, [
+                                'embedded' => true, ]);
                             $object->$method($value);
                         }
                     //ReferenceMany
@@ -62,8 +63,8 @@ class MongoYamlFixture extends AbstractFixture
                             $embed_class = $metadata->fieldMappings[$field]['targetDocument'];
                             $embed_data = $value;
                             $embed_meta = $this->getMetaDataForClass($embed_class);
-                            $value = $this->createObject($embed_class, $embed_data, $embed_meta, array(
-                                'embedded' => true));
+                            $value = $this->createObject($embed_class, $embed_data, $embed_meta, [
+                                'embedded' => true, ]);
                         // ReferenceOne
                         } else {
                             $value = $this->loader->getReference($value);

@@ -2,24 +2,23 @@
 
 namespace Khepin\YamlFixturesBundle\Loader;
 
-use Khepin\YamlFixturesBundle\Fixture\YamlAclFixture;
-use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;
-use Symfony\Component\Yaml\Yaml;
+use Khepin\YamlFixturesBundle\Fixture\YamlAclFixture;
 use Symfony\Component\HttpKernel\KernelInterface;
+use Symfony\Component\Yaml\Yaml;
 
 class YamlLoader
 {
     protected $bundles;
 
     /**
-     *
      * @var type
      */
     protected $kernel;
 
     /**
-     * Doctrine entity manager
+     * Doctrine entity manager.
+     *
      * @var type
      */
     protected $object_manager;
@@ -27,19 +26,21 @@ class YamlLoader
     protected $acl_manager = null;
 
     /**
-     * Array of all yml files containing fixtures that should be loaded
+     * Array of all yml files containing fixtures that should be loaded.
+     *
      * @var type
      */
-    protected $fixture_files = array();
+    protected $fixture_files = [];
 
     /**
-     * Maintains references to already created objects
+     * Maintains references to already created objects.
+     *
      * @var type
      */
-    protected $references = array();
+    protected $references = [];
 
     /**
-     * The directory containing the fixtures files
+     * The directory containing the fixtures files.
      *
      * @var string
      */
@@ -53,7 +54,6 @@ class YamlLoader
     }
 
     /**
-     *
      * @param type $manager
      */
     public function setAclManager($manager = null)
@@ -62,8 +62,10 @@ class YamlLoader
     }
 
     /**
-     * Returns a previously saved reference
-     * @param  type $reference_name
+     * Returns a previously saved reference.
+     *
+     * @param type $reference_name
+     *
      * @return type
      */
     public function getReference($reference_name)
@@ -72,7 +74,8 @@ class YamlLoader
     }
 
     /**
-     * Sets a reference to an object
+     * Sets a reference to an object.
+     *
      * @param type $name
      * @param type $object
      */
@@ -82,7 +85,7 @@ class YamlLoader
     }
 
     /**
-     * Gets all fixtures files
+     * Gets all fixtures files.
      */
     protected function loadFixtureFiles()
     {
@@ -91,14 +94,14 @@ class YamlLoader
             if (strpos($bundle, '/')) {
                 list($bundle, $file) = explode('/', $bundle);
             }
-            $path = $this->kernel->locateResource('@' . $bundle);
-            $files = glob($path . $this->directory . '/'.$file.'.yml');
+            $path = $this->kernel->locateResource('@'.$bundle);
+            $files = glob($path.$this->directory.'/'.$file.'.yml');
             $this->fixture_files = array_unique(array_merge($this->fixture_files, $files));
         }
     }
 
     /**
-     * Loads the fixtures file by file and saves them to the database
+     * Loads the fixtures file by file and saves them to the database.
      */
     public function loadFixtures()
     {
@@ -125,20 +128,20 @@ class YamlLoader
     }
 
     /**
-     * Remove all fixtures from the database
+     * Remove all fixtures from the database.
      */
     public function purgeDatabase($persistence, $databaseName = null, $withTruncate = false)
     {
-        $purgetools = array(
-            'orm'       => array(
+        $purgetools = [
+            'orm'       => [
                 'purger'    => 'Doctrine\Common\DataFixtures\Purger\ORMPurger',
                 'executor'  => 'Doctrine\Common\DataFixtures\Executor\ORMExecutor',
-            ),
-            'mongodb'   => array(
+            ],
+            'mongodb'   => [
                 'purger'    => 'Doctrine\Common\DataFixtures\Purger\MongoDBPurger',
                 'executor'  => 'Doctrine\Common\DataFixtures\Executor\MongoDBExecutor',
-            )
-        );
+            ],
+        ];
         // Retrieve the correct purger and executor
         $purge_class = $purgetools[$persistence]['purger'];
         $executor_class = $purgetools[$persistence]['executor'];
@@ -146,7 +149,7 @@ class YamlLoader
         // Instanciate purger and executor
         $persister = $this->getPersister($persistence);
         $entityManagers = ($databaseName)
-            ? array($persister->getManager($databaseName))
+            ? [$persister->getManager($databaseName)]
             : $persister->getManagers();
 
         foreach ($entityManagers as $entityManager) {
@@ -164,12 +167,13 @@ class YamlLoader
      * Returns the doctrine persister for the given persistence layer
      * @return ManagerRegistry
      */
+
     public function getPersister($persistence)
     {
-        $managers = array(
+        $managers = [
             'orm'       => 'doctrine',
             'mongodb'   => 'doctrine_mongodb',
-        );
+        ];
 
         return $this->kernel->getContainer()->get($managers[$persistence]);
     }
@@ -179,10 +183,10 @@ class YamlLoader
      */
     public function getFixtureClass($persistence)
     {
-        $classes = array(
+        $classes = [
             'orm'       => 'Khepin\YamlFixturesBundle\Fixture\OrmYamlFixture',
-            'mongodb'   => 'Khepin\YamlFixturesBundle\Fixture\MongoYamlFixture'
-        );
+            'mongodb'   => 'Khepin\YamlFixturesBundle\Fixture\MongoYamlFixture',
+        ];
 
         return $classes[$persistence];
     }

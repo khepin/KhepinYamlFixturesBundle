@@ -21,6 +21,7 @@ class Car
 
     /**
      * @ODM\Date
+     *
      * @var type
      */
     private $date_purchased;

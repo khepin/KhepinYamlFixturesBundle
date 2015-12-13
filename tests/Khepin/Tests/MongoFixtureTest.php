@@ -2,9 +2,9 @@
 
 namespace Khepin\Tests;
 
-use \Mockery as m;
-use Khepin\YamlFixturesBundle\Loader\YamlLoader;
 use Khepin\Utils\BaseTestCaseMongo;
+use Khepin\YamlFixturesBundle\Loader\YamlLoader;
+use Mockery as m;
 
 class MongoFixtureTest extends BaseTestCaseMongo
 {
@@ -24,24 +24,24 @@ class MongoFixtureTest extends BaseTestCaseMongo
                 ->mock();
         $this->kernel = m::mock(
             '\Symfony\Component\HttpKernel\KernelInterface',
-            array(
-                    'locateResource' => __DIR__ . '/mongo/',
-                    'getContainer'   => $container
-            )
+            [
+                    'locateResource' => __DIR__.'/mongo/',
+                    'getContainer'   => $container,
+            ]
         );
-        $loader = new YamlLoader($this->kernel, array('SomeBundle'), 'DataFixtures');
+        $loader = new YamlLoader($this->kernel, ['SomeBundle'], 'DataFixtures');
         $loader->purgeDatabase('mongodb');
     }
 
     public function testSimpleLoading()
     {
-        $loader = new YamlLoader($this->kernel, array('SomeBundle'), 'DataFixtures');
+        $loader = new YamlLoader($this->kernel, ['SomeBundle'], 'DataFixtures');
         $loader->loadFixtures();
 
         $dm = $this->doctrine->getManager();
         $cars = $dm->getRepository('Khepin\Fixture\Document\Car')->findAll();
         $this->assertEquals(2, count($cars));
-        $car = $dm->getRepository('Khepin\Fixture\Document\Car')->findOneBy(array('name' => 'Mercedes'));
+        $car = $dm->getRepository('Khepin\Fixture\Document\Car')->findOneBy(['name' => 'Mercedes']);
         $this->assertEquals('Mercedes', $car->getName());
         $date = new \DateTime('2012-01-01');
         $this->assertEquals($date, $car->getDatePurchased());
@@ -50,7 +50,7 @@ class MongoFixtureTest extends BaseTestCaseMongo
 
     public function testLoadSingleFile()
     {
-        $loader = new YamlLoader($this->kernel, array('SomeBundle/cars'), 'DataFixtures');
+        $loader = new YamlLoader($this->kernel, ['SomeBundle/cars'], 'DataFixtures');
         $loader->loadFixtures();
 
         $dm = $this->doctrine->getManager();
@@ -62,7 +62,7 @@ class MongoFixtureTest extends BaseTestCaseMongo
 
     public function testSingleFileLoadedOnlyOnce()
     {
-        $loader = new YamlLoader($this->kernel, array('SomeBundle/cars', 'SomeBundle'), 'DataFixtures');
+        $loader = new YamlLoader($this->kernel, ['SomeBundle/cars', 'SomeBundle'], 'DataFixtures');
         $loader->loadFixtures();
 
         $em = $this->doctrine->getManager();
@@ -74,7 +74,7 @@ class MongoFixtureTest extends BaseTestCaseMongo
 
     public function testPurge()
     {
-        $loader = new YamlLoader($this->kernel, array('SomeBundle'), 'DataFixtures');
+        $loader = new YamlLoader($this->kernel, ['SomeBundle'], 'DataFixtures');
         $loader->loadFixtures();
         $loader->purgeDatabase('mongodb');
 
@@ -87,27 +87,27 @@ class MongoFixtureTest extends BaseTestCaseMongo
 
     public function testContext()
     {
-        $loader = new YamlLoader($this->kernel, array('SomeBundle'), 'DataFixtures');
+        $loader = new YamlLoader($this->kernel, ['SomeBundle'], 'DataFixtures');
         $loader->loadFixtures('french_cars');
 
         $repo = $this->doctrine->getManager()->getRepository('Khepin\Fixture\Document\Car');
         $cars = $repo->findAll();
         $this->assertEquals(5, count($cars));
 
-        $car = $repo->findOneBy(array('name' => 'Peugeot'));
+        $car = $repo->findOneBy(['name' => 'Peugeot']);
         $this->assertEquals('Peugeot', $car->getName());
 
-        $car = $repo->findOneBy(array('name' => 'BMW'));
+        $car = $repo->findOneBy(['name' => 'BMW']);
         $this->assertEquals('BMW', $car->getName());
     }
 
     public function testReferenceOne()
     {
-        $loader = new YamlLoader($this->kernel, array('SomeBundle'), 'DataFixtures');
+        $loader = new YamlLoader($this->kernel, ['SomeBundle'], 'DataFixtures');
         $loader->loadFixtures('with_drivers', 'family_cars');
 
         $repo = $this->doctrine->getManager()->getRepository('Khepin\Fixture\Document\Driver');
-        $driver = $repo->findOneBy(array('name' => 'Mom'));
+        $driver = $repo->findOneBy(['name' => 'Mom']);
 
         $this->assertEquals('Mercedes', $driver->getPreferredCar()->getName());
         $this->assertNotEquals('BMW', $driver->getPreferredCar()->getName());
@@ -115,32 +115,32 @@ class MongoFixtureTest extends BaseTestCaseMongo
 
     public function testReferenceMany()
     {
-        $loader = new YamlLoader($this->kernel, array('SomeBundle'), 'DataFixtures');
+        $loader = new YamlLoader($this->kernel, ['SomeBundle'], 'DataFixtures');
         $loader->loadFixtures('with_drivers', 'family_cars');
 
         $repo = $this->doctrine->getManager()->getRepository('Khepin\Fixture\Document\Driver');
-        $driver = $repo->findOneBy(array('name' => 'Mom'));
+        $driver = $repo->findOneBy(['name' => 'Mom']);
         $this->assertEquals($driver->getCars()->count(), 3);
         $cars = $driver->getCars();
         $car = $cars[0];
         $this->assertEquals('Mercedes', $car->getName());
-        $driver = $repo->findOneBy(array('name' => 'Dad'));
+        $driver = $repo->findOneBy(['name' => 'Dad']);
         $this->assertEquals($driver->getCars()->count(), 3);
     }
 
     public function testServiceCalls()
     {
-        $loader = new YamlLoader($this->kernel, array('SomeBundle'), 'DataFixtures');
+        $loader = new YamlLoader($this->kernel, ['SomeBundle'], 'DataFixtures');
         $loader->loadFixtures('service');
 
         $repo = $this->doctrine->getManager()->getRepository('Khepin\Fixture\Document\Car');
-        $car = $repo->findOneBy(array('name' => 'toyota'));
+        $car = $repo->findOneBy(['name' => 'toyota']);
         $this->assertTrue('toyota' === $car->getName());
     }
 
     public function testEmbedOne()
     {
-        $loader = new YamlLoader($this->kernel, array('SomeBundle'), 'DataFixtures');
+        $loader = new YamlLoader($this->kernel, ['SomeBundle'], 'DataFixtures');
         $loader->loadFixtures('embed_one');
 
         $repo = $this->doctrine->getManager()->getRepository('Khepin\Fixture\Document\Article');
@@ -156,7 +156,7 @@ class MongoFixtureTest extends BaseTestCaseMongo
 
     public function testEmbedMany()
     {
-        $loader = new YamlLoader($this->kernel, array('SomeBundle'), 'DataFixtures');
+        $loader = new YamlLoader($this->kernel, ['SomeBundle'], 'DataFixtures');
         $loader->loadFixtures('embed_many');
 
         $repo = $this->doctrine->getManager()->getRepository('Khepin\Fixture\Document\Article');

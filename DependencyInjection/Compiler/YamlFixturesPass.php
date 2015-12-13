@@ -1,9 +1,10 @@
 <?php
+
 namespace Khepin\YamlFixturesBundle\DependencyInjection\Compiler;
 
-use Symfony\Component\DependencyInjection\Reference;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Reference;
 
 class YamlFixturesPass implements CompilerPassInterface
 {
@@ -17,7 +18,7 @@ class YamlFixturesPass implements CompilerPassInterface
         $definition = $container->getDefinition('khepin.yaml_loader');
         if ($definition->hasMethodCall('setAclManager')) {
             $definition->removeMethodCall('setAclManager');
-            $definition->addMethodCall('setAclManager', array(new Reference('problematic.acl_manager')));
+            $definition->addMethodCall('setAclManager', [new Reference('problematic.acl_manager')]);
         }
     }
 }

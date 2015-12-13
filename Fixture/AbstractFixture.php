@@ -6,7 +6,7 @@ use Doctrine\Common\Persistence\ObjectManager;
 
 abstract class AbstractFixture
 {
-    protected $tags = array();
+    protected $tags = [];
 
     protected $file;
 
@@ -24,11 +24,13 @@ abstract class AbstractFixture
     }
 
     /**
-     * Returns if the given tag is set for the current fixture
-     * @param  type    $tag
-     * @return boolean
+     * Returns if the given tag is set for the current fixture.
+     *
+     * @param type $tag
+     *
+     * @return bool
      */
-    public function hasTag(Array $tags)
+    public function hasTag(array $tags)
     {
         // if no tags were specified, the fixture should always be loaded
         if (count($this->tags) == 0 || count(array_intersect($this->tags, $tags)) > 0) {
@@ -72,7 +74,7 @@ abstract class AbstractFixture
 
         if ($this->isReverseSaveOrder()) {
             $refs = array_keys($this->file['fixtures']);
-            for ($i = (count($refs) - 1); $i>=0; $i--) {
+            for ($i = (count($refs) - 1); $i >= 0; $i--) {
                 $manager->persist($this->loader->getReference($refs[$i]));
             }
         }
@@ -90,7 +92,8 @@ abstract class AbstractFixture
     /**
      * For fixtures that have relations to the same table, they need to appear
      * in the opposite order that they need to be saved.
-     * @return boolean
+     *
+     * @return bool
      */
     public function isReverseSaveOrder()
     {
@@ -102,13 +105,14 @@ abstract class AbstractFixture
     }
 
     /**
-     * Creates and returns one object based on the given data and metadata
+     * Creates and returns one object based on the given data and metadata.
      *
      * @param $class object's class name
      * @param $data array of the object's fixture data
      * @param $metadata the class metadata for doctrine
      * @param $options options specific to each implementation
-     * @return Object
+     *
+     * @return object
      */
-    abstract public function createObject($class, $data, $metadata, $options = array());
+    abstract public function createObject($class, $data, $metadata, $options = []);
 }

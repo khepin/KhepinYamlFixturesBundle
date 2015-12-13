@@ -23,18 +23,20 @@ class Car
 
     /**
      * @ORM\Column(type="date", nullable=true)
+     *
      * @var type
      */
     private $date_purchased;
 
     /**
      * @ORM\ManyToOne(targetEntity="Owner")
+     *
      * @var Owner
      */
     private $owner;
 
     /**
-     * @param string $name
+     * @param string    $name
      * @param \DateTime $date_purchased
      */
     public function __construct($name = null, \DateTime $date_purchased = null)
