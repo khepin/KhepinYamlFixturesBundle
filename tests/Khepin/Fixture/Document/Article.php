@@ -2,8 +2,8 @@
 
 namespace Khepin\Fixture\Document;
 
-use Doctrine\ODM\MongoDB\Mapping\Annotations as ODM;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ODM\MongoDB\Mapping\Annotations as ODM;
 
 /**
  * @ODM\Document
@@ -32,13 +32,14 @@ class Article
 
     /**
      * @ODM\String
+     *
      * @var type
      */
     private $content;
 
     public function __construct()
     {
-        $this->comments = new ArrayCollection;
+        $this->comments = new ArrayCollection();
     }
 
     public function getId()

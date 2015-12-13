@@ -29,6 +29,7 @@ class Driver
 
     /**
      * @ORM\Column(type="string")
+     *
      * @var type
      */
     private $name;

@@ -3,23 +3,23 @@
 
 // dependent libraries for test environment
 
-define('VENDOR_PATH', __DIR__ . '/../vendor');
+define('VENDOR_PATH', __DIR__.'/../vendor');
 
 if (!is_dir(VENDOR_PATH)) {
     mkdir(VENDOR_PATH, 0775, true);
 }
 
-$deps = array(
-    array('doctrine-orm', 'git://github.com/doctrine/doctrine2.git'),
-    array('doctrine-dbal', 'git://github.com/doctrine/dbal.git'),
-    array('doctrine-common', 'git://github.com/doctrine/common.git'),
-    array('doctrine-data-fixtures', 'git://github.com/doctrine/data-fixtures.git'),
+$deps = [
+    ['doctrine-orm', 'git://github.com/doctrine/doctrine2.git'],
+    ['doctrine-dbal', 'git://github.com/doctrine/dbal.git'],
+    ['doctrine-common', 'git://github.com/doctrine/common.git'],
+    ['doctrine-data-fixtures', 'git://github.com/doctrine/data-fixtures.git'],
 
-    array('Symfony/Component/ClassLoader', 'git://github.com/symfony/ClassLoader.git', 'v2.0.9'),
-    array('Symfony/Component/Yaml', 'git://github.com/symfony/Yaml.git', 'v2.0.9'),
+    ['Symfony/Component/ClassLoader', 'git://github.com/symfony/ClassLoader.git', 'v2.0.9'],
+    ['Symfony/Component/Yaml', 'git://github.com/symfony/Yaml.git', 'v2.0.9'],
 
-    array('Mockery', 'git://github.com/padraic/mockery'),
-);
+    ['Mockery', 'git://github.com/padraic/mockery'],
+];
 
 foreach ($deps as $dep) {
     list($name, $url, $rev) = $dep;

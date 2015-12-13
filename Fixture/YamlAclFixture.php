@@ -22,8 +22,10 @@ class YamlAclFixture extends AbstractFixture
     }
 
     /**
-     * Retrieves the constant value for the given mask name
-     * @param  type $permission
+     * Retrieves the constant value for the given mask name.
+     *
+     * @param type $permission
+     *
      * @return type
      */
     public function getMask($permission)
@@ -31,7 +33,7 @@ class YamlAclFixture extends AbstractFixture
         return constant('Symfony\Component\Security\Acl\Permission\MaskBuilder::'.$permission);
     }
 
-    public function createObject($class, $data, $metadata, $options = array())
+    public function createObject($class, $data, $metadata, $options = [])
     {
         // No implementation for ACL fixtures
     }

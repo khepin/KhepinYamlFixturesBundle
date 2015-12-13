@@ -1,4 +1,5 @@
 <?php
+
 namespace Khepin\YamlFixturesBundle\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
@@ -43,8 +44,7 @@ class FixturesLoadCommand extends ContainerAwareCommand
                 null,
                 InputOption::VALUE_NONE,
                 'Purge data by using a database-level TRUNCATE statement (only for ORM)'
-            )
-        ;
+            );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)

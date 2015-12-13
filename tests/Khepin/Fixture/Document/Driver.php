@@ -17,7 +17,7 @@ class Driver
     /**
      * @ODM\ReferenceMany(targetDocument="Car")
      */
-    private $cars = array();
+    private $cars = [];
 
     /**
      * @ODM\ReferenceOne(targetDocument="Car")
@@ -26,6 +26,7 @@ class Driver
 
     /**
      * @ODM\String
+     *
      * @var type
      */
     private $name;
