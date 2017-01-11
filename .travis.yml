@@ -10,6 +10,7 @@ php:
 services: mongodb
 
 before_script:
+  - pecl install  -f mongodb
   - echo "extension = mongo.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - composer install
 
