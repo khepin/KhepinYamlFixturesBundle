@@ -10,7 +10,7 @@ php:
 services: mongodb
 
 before_script:
-  - yes '' | pecl -q install -f mongo-stable
+  - yes '' | pecl -q install -f mongo
   # - php --ri mongo
   - phpenv config-add etc/phpconfig.ini
   - composer install
