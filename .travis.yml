@@ -13,7 +13,6 @@ before_script:
   - yes '' | pecl -q install -f mongo-stable
   # - php --ri mongo
   - phpenv config-add etc/phpconfig.ini
-  - curl -s http://getcomposer.org/installer | php
-  - php composer.phar install
+  - composer install
 
 script: vendor/bin/phpunit -c tests/
