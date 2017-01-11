@@ -1,3 +1,9 @@
+## 1.0.1
+
+**Fixes**
+ 
+ _ https://github.com/khepin/KhepinYamlFixturesBundle/issues/62
+
 ## 1.0
 
 **Features**
