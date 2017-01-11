@@ -10,7 +10,8 @@ php:
 services: mongodb
 
 before_script:
-  - pecl install -f mongo
+  - yes '' | pecl -q install -f mongo-stable
+  # - php --ri mongo
   - phpenv config-add etc/phpconfig.ini
   - curl -s http://getcomposer.org/installer | php
   - php composer.phar install
