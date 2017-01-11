@@ -10,9 +10,12 @@ php:
 services: mongodb
 
 before_script:
-  - yes '' | pecl install -f mongo
+  - if [[ $TRAVIS_PHP_VERSION != hhvm ]]; then phpenv config-rm xdebug.ini; fi;
+  - echo "extension = mongo.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  # - yes '' | pecl install -f mongo
   # - php --ri mongo
-  - phpenv config-add etc/phpconfig.ini
+  # - phpenv config-add etc/phpconfig.ini
+  - composer self-update
   - composer install
 
 script: vendor/bin/phpunit -c tests/
