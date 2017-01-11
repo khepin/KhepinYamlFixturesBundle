@@ -10,8 +10,9 @@ php:
 services: mongodb
 
 before_script:
-  - pecl install  -f mongodb
-  - echo "extension = mongo.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
-  - composer install
+  - pecl install -f mongo
+  - phpenv config-add etc/phpconfig.ini
+  - curl -s http://getcomposer.org/installer | php
+  - php composer.phar install
 
 script: vendor/bin/phpunit -c tests/
