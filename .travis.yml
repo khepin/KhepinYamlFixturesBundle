@@ -8,8 +8,9 @@ php:
 services: mongodb
 
 before_script:
+  - phpenv config-rm xdebug.ini
   - echo "memory_limit=520M" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
   - curl -s http://getcomposer.org/installer | php
-  - php -d memory_limit=512M composer.phar install
+  - php composer.phar install
 
 script: vendor/bin/phpunit -c tests/
