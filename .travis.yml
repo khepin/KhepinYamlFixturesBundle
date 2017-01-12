@@ -8,6 +8,7 @@ php:
 services: mongodb
 
 before_script:
+  - echo "extension = mongo.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - phpenv config-rm xdebug.ini
   - composer install
 
