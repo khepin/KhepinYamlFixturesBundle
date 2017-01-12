@@ -2,4 +2,3 @@
 vendor/*
 reports/*
 composer.phar
-composer.lock
