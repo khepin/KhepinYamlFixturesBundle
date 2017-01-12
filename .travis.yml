@@ -8,6 +8,7 @@ php:
 services: mongodb
 
 before_script:
+  - echo "memory_limit=520M" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
   - curl -s http://getcomposer.org/installer | php
   - php -d memory_limit=512M composer.phar install
 
