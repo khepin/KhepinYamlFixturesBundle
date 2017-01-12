@@ -15,7 +15,7 @@ class BaseTestCaseOrm extends \PHPUnit_Framework_TestCase
 
     private function getMockAnnotatedConfig()
     {
-        $config = $this->getMock('Doctrine\ORM\Configuration');
+        $config = $this->createMock('Doctrine\ORM\Configuration');
         $config
                 ->expects($this->once())
                 ->method('getProxyDir')

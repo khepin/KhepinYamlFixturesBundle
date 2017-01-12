@@ -6,6 +6,9 @@ use \Mockery as m;
 use Khepin\YamlFixturesBundle\Loader\YamlLoader;
 use Khepin\Utils\BaseTestCaseOrm;
 
+/**
+ * @group orm
+ */
 class YamlFixtureTest extends BaseTestCaseOrm
 {
     protected $kernel = null;

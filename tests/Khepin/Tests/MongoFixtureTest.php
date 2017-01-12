@@ -6,6 +6,9 @@ use \Mockery as m;
 use Khepin\YamlFixturesBundle\Loader\YamlLoader;
 use Khepin\Utils\BaseTestCaseMongo;
 
+/**
+ * @group mongo
+ */
 class MongoFixtureTest extends BaseTestCaseMongo
 {
     protected $kernel = null;

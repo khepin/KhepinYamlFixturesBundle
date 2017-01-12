@@ -31,7 +31,8 @@ class BaseTestCaseMongo extends \PHPUnit_Framework_TestCase
             'getRetryConnect'               => 2,
             'getRetryQuery'                 => 2,
             'getLoggerCallable'             => null,
-            'getRepositoryFactory'          => new \Doctrine\ODM\MongoDB\Repository\DefaultRepositoryFactory()
+            'getRepositoryFactory'          => new \Doctrine\ODM\MongoDB\Repository\DefaultRepositoryFactory(),
+            'getPersistentCollectionFactory'=> new \Doctrine\ODM\MongoDB\PersistentCollection\DefaultPersistentCollectionFactory(),
         ));
 
         return $config;
