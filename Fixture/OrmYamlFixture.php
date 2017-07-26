@@ -12,6 +12,7 @@ class OrmYamlFixture extends AbstractFixture
         $associations = array_keys($metadata->associationMappings);
 
         $class = new \ReflectionClass($class);
+        $constructArguments = [];
         if (isset($data['__construct'])) {
             $constructArguments = $this->constructorArgs($data['__construct']);
             unset($data['__construct']);
