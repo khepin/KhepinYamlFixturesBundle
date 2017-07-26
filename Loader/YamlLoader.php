@@ -87,13 +87,39 @@ class YamlLoader
     protected function loadFixtureFiles()
     {
         foreach ($this->bundles as $bundle) {
-            $file = '*';
+            $file = null;
             if (strpos($bundle, '/')) {
                 list($bundle, $file) = explode('/', $bundle);
             }
+
             $path = $this->kernel->locateResource('@' . $bundle);
-            $files = glob($path . $this->directory . '/'.$file.'.yml');
-            $this->fixture_files = array_unique(array_merge($this->fixture_files, $files));
+            $path .= $this->directory;
+
+            $bundleFiles = [];
+            if (!empty($file)) {
+                $bundleFiles = glob($path . '/'.$file.'.yml');
+            } else {
+                $directory = new \RecursiveDirectoryIterator($path);
+                $iterator = new \RecursiveIteratorIterator($directory);
+                $files = new \RegexIterator($iterator, '/^.+\.yml$/i', \RecursiveRegexIterator::GET_MATCH);
+
+                foreach ($files as $file) {
+                    $bundleFiles[] = $file[0];
+                }
+            }
+
+            uasort($bundleFiles, function($a, $b) {
+                $a = basename($a);
+                $b = basename($b);
+
+                if ($a == $b) {
+                    return 0;
+                }
+
+                return ($a < $b) ? -1 : 1;
+            });
+
+            $this->fixture_files = array_unique(array_merge($this->fixture_files, $bundleFiles));
         }
     }
 
