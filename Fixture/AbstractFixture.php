@@ -102,6 +102,55 @@ abstract class AbstractFixture
     }
 
     /**
+     * Extract the constructor arguments
+     *
+     * @param array $arguments
+     * @return mixed
+     */
+    public function constructorArgs($arguments)
+    {
+        $constructArguments = array();
+
+        if (is_array($arguments)) {
+            foreach ($arguments as $argument) {
+                if (is_array($argument)) {
+                    if ($argument['type'] == 'datetime') {
+                        $constructArguments[] = new \DateTime($argument['value']);
+                    } elseif ($argument['type'] == 'reference') {
+                        $constructArguments[] = $this->loader->getReference($argument['value']);
+                    } else {
+                        $constructArguments[] = $argument['value'];
+                    }
+                } else {
+                    $constructArguments[] = $argument;
+                }
+            }
+        } else {
+            $constructArguments[] = $arguments;
+        }
+
+        return $constructArguments;
+    }
+
+    /**
+     * Creates an instance with any given constructor args
+     *
+     * @param string $class
+     * @param array $data
+     * @return void
+     */
+    public function makeInstance($class, $data)
+    {
+        $class = new \ReflectionClass($class);
+        $constructArguments = [];
+        if (isset($data['__construct'])) {
+            $constructArguments = $this->constructorArgs($data['__construct']);
+        }
+
+        return $class->newInstanceArgs($constructArguments);
+    }
+
+    /**
      * Creates and returns one object based on the given data and metadata
      *
      * @param $class object's class name

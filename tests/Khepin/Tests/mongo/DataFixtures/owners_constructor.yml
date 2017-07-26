@@ -1,0 +1,7 @@
+model: Khepin\Fixture\Document\Owner
+tags: [ construct ]
+fixtures:
+  some_small_company:
+    __construct:
+      - {type: invalid, value: "Some Small Company"}
+      - {type: reference, value: "ford"}
