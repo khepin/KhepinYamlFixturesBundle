@@ -21,7 +21,8 @@ class MongoYamlFixture extends AbstractFixture
         $embedded = isset($options['embedded']);
         $mapping = array_keys($metadata->fieldMappings);
         // Instantiate new object
-        $object = new $class;
+        $object = $this->makeInstance($class, $data);
+        unset($data['__construct']);
 
         foreach ($data as $field => $value) {
             // Add the fields defined in the fixtures file
