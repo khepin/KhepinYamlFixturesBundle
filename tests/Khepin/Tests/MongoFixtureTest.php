@@ -177,12 +177,12 @@ class MongoFixtureTest extends BaseTestCaseMongo
         $loader = new YamlLoader($this->kernel, array('SomeBundle'), 'DataFixtures');
         $loader->loadFixtures('construct');
 
-        $repo = $this->doctrine->getManager()->getRepository('Khepin\Fixture\Entity\Car');
+        $repo = $this->doctrine->getManager()->getRepository('Khepin\Fixture\Document\Car');
         $car = $repo->findOneByName('Ford');
         $this->assertEquals('Ford', $car->getName());
         $this->assertInstanceOf('\DateTime', $car->getDatePurchased());
 
-        $repo = $this->doctrine->getManager()->getRepository('Khepin\Fixture\Entity\Owner');
+        $repo = $this->doctrine->getManager()->getRepository('Khepin\Fixture\Document\Owner');
         $owner = $repo->findOneByName('Some Small Company');
         $this->assertEquals(1, count($owner->getOwnedCars()));
         $this->assertEquals('Some Small Company', $owner->getName());
