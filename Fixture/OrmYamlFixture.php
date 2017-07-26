@@ -11,13 +11,8 @@ class OrmYamlFixture extends AbstractFixture
         $mapping = array_keys($metadata->fieldMappings);
         $associations = array_keys($metadata->associationMappings);
 
-        $class = new \ReflectionClass($class);
-        $constructArguments = [];
-        if (isset($data['__construct'])) {
-            $constructArguments = $this->constructorArgs($data['__construct']);
-            unset($data['__construct']);
-        }
-        $object = $class->newInstanceArgs($constructArguments);
+        $object = $this->makeInstance($class, $data);
+        unset($data['__construct']);
 
         foreach ($data as $field => $value) {
             // Add the fields defined in the fistures file

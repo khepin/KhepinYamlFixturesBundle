@@ -133,6 +133,24 @@ abstract class AbstractFixture
     }
 
     /**
+     * Creates an instance with any given constructor args
+     *
+     * @param string $class
+     * @param array $data
+     * @return void
+     */
+    public function makeInstance($class, $data)
+    {
+        $class = new \ReflectionClass($class);
+        $constructArguments = [];
+        if (isset($data['__construct'])) {
+            $constructArguments = $this->constructorArgs($data['__construct']);
+        }
+
+        return $class->newInstanceArgs($constructArguments);
+    }
+
+    /**
      * Creates and returns one object based on the given data and metadata
      *
      * @param $class object's class name
